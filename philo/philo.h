@@ -6,8 +6,14 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:49 by nlouro            #+#    #+#             */
-/*   Updated: 2022/03/15 12:34:56 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/03/24 17:03:25 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef PHILO_H
+# define PHILO_H
 
+#include <unistd.h>
+#include <stdio.h> // used for printf
+
+#endif
