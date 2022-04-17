@@ -6,9 +6,11 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 13:55:35 by nlouro            #+#    #+#             */
-/*   Updated: 2022/04/16 15:43:07 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/04/17 07:27:42 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "philo.h"
 
 static int	ft_isspace(int c)
 {
