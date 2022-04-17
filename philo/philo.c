@@ -6,24 +6,14 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/04/17 23:23:50 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/04/17 23:53:33 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	main(int argc, char **argv)
+int	parse_user_input(int argc, char **argv, struct Philo t_Philo)
 {
-	int	number_of_philosophers;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int number_of_times_each_philosopher_must_eat;
-	struct timeval current_time;
-
-	gettimeofday(&current_time, NULL);
-	printf("seconds : %ld\nmicro seconds : %d\n", current_time.tv_sec, current_time.tv_usec);
-
 	if (argc < 5)
 	{
 		printf("Error: missing arguments\n");
@@ -31,19 +21,35 @@ int	main(int argc, char **argv)
 	}
 	else
 	{
-		printf("number_of_philosophers: %s\n", argv[1]);
+		t_Philo.number_of_philosophers = ft_atoi(argv[1]);
+		t_Philo.time_to_die = ft_atoi(argv[2]);
+		t_Philo.time_to_eat = ft_atoi(argv[3]);
+		t_Philo.time_to_sleep = ft_atoi(argv[4]);
+		printf("number_of_philosophers: %d\n", t_Philo.number_of_philosophers);
 		printf("time_to_die: %s\n", argv[2]);
 		printf("time_to_eat: %s\n", argv[3]);
 		printf("time_to_sleep: %s\n", argv[4]);
-		number_of_philosophers = ft_atoi(argv[1]);
-		time_to_die = ft_atoi(argv[2]);
-		time_to_eat = ft_atoi(argv[3]);
-		time_to_sleep = ft_atoi(argv[4]);
 	}
 	if (argc > 5)
 	{
 		printf("number_of_times_each_philosopher_must_eat (opt): %s\n", argv[5]);
-		number_of_times_each_philosopher_must_eat = ft_atoi(argv[5]);
+		t_Philo.number_of_times_each_philosopher_must_eat = ft_atoi(argv[5]);
 	}
+	return (0);
+}
+
+int	main(int argc, char **argv)
+{
+	int	error;
+	struct Philo	t_Philo;
+	struct timeval current_time;
+
+	t_Philo.number_of_philosophers = 0;
+	gettimeofday(&current_time, NULL);
+	printf("seconds : %ld\nmicro seconds : %d\n", current_time.tv_sec, current_time.tv_usec);
+	error = parse_user_input(argc, argv, t_Philo);
+	if (error == 1)
+		return (1);
+	//start_threads(number_of_philosophers);
 	return (0);
 }

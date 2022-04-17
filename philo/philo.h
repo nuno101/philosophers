@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:49 by nlouro            #+#    #+#             */
-/*   Updated: 2022/04/17 23:09:30 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/04/17 23:55:22 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,15 @@
 #include <stdio.h> // used for printf
 #include <pthread.h> // used for mutex functions 
 #include <sys/time.h> // used for gettimeofday
+
+typedef struct Philo 
+{
+	int	number_of_philosophers;
+	int	time_to_die;
+	int	time_to_eat;
+	int	time_to_sleep;
+	int	number_of_times_each_philosopher_must_eat;
+}	t_Philo;
 
 int		ft_atoi(const char *str);
 void	log_fork(int philo, int timestamp);
