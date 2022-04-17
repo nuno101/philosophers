@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/04/17 21:52:34 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/04/17 23:23:50 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@ int	main(int argc, char **argv)
 	int	time_to_eat;
 	int	time_to_sleep;
 	int number_of_times_each_philosopher_must_eat;
+	struct timeval current_time;
+
+	gettimeofday(&current_time, NULL);
+	printf("seconds : %ld\nmicro seconds : %d\n", current_time.tv_sec, current_time.tv_usec);
 
 	if (argc < 5)
 	{
