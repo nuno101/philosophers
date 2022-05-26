@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/26 16:47:17 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/26 17:09:15 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,8 @@ void *start_philo(void *args)
 
 	ph = (t_Philo *)args;
 	repeat = ph->nr_of_times_philo_must_eat;
-	//FIXME
-	philo_id = 1;
-	//printf("nr_of_philos: %d\n", ph->nr_of_philos);
+	philo_id = ph->philo_id;
+	ph->philo_id++;
 	while (repeat > 0)
 	{
 		//TODO: get forks
@@ -101,7 +100,7 @@ void	create_threads(t_Philo *philos)
 	i = 0;
 	gettimeofday(&current_time, NULL);
 	philos->stime = current_time.tv_usec;
-
+	philos->philo_id = i;
 	// Create a thread per philosopher calling start_philo()
 	while (i < philos->nr_of_philos)
 	{
