@@ -6,15 +6,20 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/17 07:14:39 by nlouro            #+#    #+#             */
-/*   Updated: 2022/04/17 07:22:18 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/26 14:00:46 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	log_fork(int philo, int timestamp)
+void	log_take_fork(int philo, int timestamp)
 {
 	printf("%d %d has taken a fork\n", timestamp, philo);
+} 
+
+void	log_put_fork(int philo, int timestamp)
+{
+	printf("%d %d has released a fork\n", timestamp, philo);
 } 
 
 void	log_eat(int philo, int timestamp)

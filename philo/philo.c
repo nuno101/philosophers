@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/26 13:23:27 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/26 15:16:28 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,38 +38,74 @@ int	parse_user_input(int argc, char **argv, t_Philo *philos)
 	return (0);
 }
 
-void *init_philo(void *arg)
+pthread_mutex_t	init_mutex()
 {
-	sleep(1);
-	//printf("micro seconds : %d\n", (int) arg);
+	pthread_mutex_t	mutex;
+
+	pthread_mutex_init(&mutex, NULL);
+	return (mutex);
+}
+
+void	init_forks(t_Philo *philos)
+{
+	int	i;
+
+	i = 0;
+	philos->forks_ar = malloc(philos->nr_of_philos * sizeof(pthread_mutex_t));
+	while (i < philos->nr_of_philos)
+	{
+		//philos->forks_ar[0] = init_mutex();
+		i++;
+	}
+}
+
+void *start_philo(void *arg)
+//void *start_philo(t_Philo *arg)
+{
+	log_take_fork(1,0);
+	//log_take_fork(1,100);
+	//sleep(1);
+	//log_put_fork(1,200);
+	//log_sleep(1,300);
+	//log_think(1,400);
 	printf("arg: %d\n", (int) arg);
-	return NULL;
+	//printf("arg: %d\n", (int) arg->nr_of_philos);
+	//printf("arg: %d\n", philos->nr_of_philos);
+	return (NULL);
 }
 
 void	create_threads(t_Philo *philos)
 {
-	pthread_t	thread_id;
+	pthread_t	threads[philos->nr_of_philos];
 	struct	timeval current_time;
 	int		i;
 	int		error;
+	int		errno;
 
 	i = 0;
 	gettimeofday(&current_time, NULL);
 	philos->stime = current_time.tv_usec;
 
-	// Create 1 thread per philosopher calling threadFunc()
+	// Create a thread per philosopher calling start_philo()
 	while (i < philos->nr_of_philos)
 	{
-	    printf("Thread creation: %d\n", i);
-		error = pthread_create(&thread_id, NULL, &init_philo, philos);
+		error = pthread_create(&threads[i], NULL, &start_philo, philos);
 		if (error)
 	    	printf("Thread creation failed\n");
 		else
-		    printf("Thread created with id %d\n", (int) thread_id);
-		// Wait for thread to exit
-		error = pthread_join(thread_id, NULL);
+		    printf("Thread %d created with id %d\n", i, (int) threads[i]);
 		i++;
 	}
+	// Wait for threads to finish
+	while (i-- > 0)
+    {
+        if (0 != (errno = pthread_join(threads[i], NULL))) {
+            printf("pthread_join() [%d] failed\n", i);
+            //return (1);
+        }
+		else
+            printf("pthread_join() [%d] ok\n", i);
+    }
 }
 
 int	main(int argc, char **argv)
@@ -81,7 +117,7 @@ int	main(int argc, char **argv)
 	gettimeofday(&current_time, NULL);
 	printf("seconds : %ld\nmicro seconds : %d\n", current_time.tv_sec, current_time.tv_usec);
 	error = parse_user_input(argc, argv, &philos);
-	printf("nr_of_philos: %d time_to_die %d\n", philos.nr_of_philos, philos.time_to_die);
+	init_forks(&philos);
 	// TODO validate_user_input(t_Philo);
 	if (error == 1)
 		return (1);
