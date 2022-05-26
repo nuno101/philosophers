@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/26 15:16:28 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/26 15:36:16 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,18 +59,18 @@ void	init_forks(t_Philo *philos)
 	}
 }
 
-void *start_philo(void *arg)
-//void *start_philo(t_Philo *arg)
+void *start_philo(void *args)
 {
+	t_Philo *ph;
+	ph = (t_Philo *)args;
+
+	printf("nr_of_philos: %d\n", ph->nr_of_philos);
 	log_take_fork(1,0);
 	//log_take_fork(1,100);
 	//sleep(1);
 	//log_put_fork(1,200);
 	//log_sleep(1,300);
 	//log_think(1,400);
-	printf("arg: %d\n", (int) arg);
-	//printf("arg: %d\n", (int) arg->nr_of_philos);
-	//printf("arg: %d\n", philos->nr_of_philos);
 	return (NULL);
 }
 
