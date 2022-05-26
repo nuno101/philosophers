@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/26 19:14:17 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/26 19:38:20 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void *start_philo(void *args)
 	//ph->philo_id++;
 	while (repeat > 0)
 	{
-		get_forks(ph, philo_id);
+		pick_forks(ph, philo_id);
 		log_take_fork(ph->stime, philo_id);
 		log_eat(ph->stime, philo_id);
 		usleep(ph->time_to_eat);
