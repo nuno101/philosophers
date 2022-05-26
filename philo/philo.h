@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:49 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/26 17:59:16 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/26 18:52:48 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 typedef struct Philo 
 {
 	int	nr_of_philos;
-	int *forks_ar;
+	pthread_mutex_t *forks_ar;
 	int	time_to_die;
 	int	time_to_eat;
 	int	time_to_sleep;

@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/26 18:02:37 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/26 19:14:17 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	parse_user_input(int argc, char **argv, t_Philo *philos)
 		printf("nr_of_times_philo_must_eat (opt): %d\n", philos->nr_of_times_philo_must_eat);
 	}
 	else
-		//TODO: handle case 
+		//TODO: handle case
 		philos->nr_of_times_philo_must_eat = INT_MAX;
 	return (0);
 }
@@ -50,7 +50,8 @@ void	init_mutex_forks(t_Philo *philos)
 	philos->forks_ar = malloc(philos->nr_of_philos * sizeof(pthread_mutex_t));
 	while (i < philos->nr_of_philos)
 	{
-		philos->forks_ar[i] =  pthread_mutex_init(&mutexes[i], NULL);
+		pthread_mutex_init(&mutexes[i], NULL);
+		philos->forks_ar[i] = mutexes[i];
 		i++;
 	}
 }
@@ -67,12 +68,10 @@ void *start_philo(void *args)
 	//ph->philo_id++;
 	while (repeat > 0)
 	{
-		//TODO: get forks
 		get_forks(ph, philo_id);
 		log_take_fork(ph->stime, philo_id);
 		log_eat(ph->stime, philo_id);
 		usleep(ph->time_to_eat);
-		//TODO: put forks
 		put_forks(ph, philo_id);
 		log_put_fork(ph->stime, philo_id);
 		log_sleep(ph->stime, philo_id);
