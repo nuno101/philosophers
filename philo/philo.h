@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:49 by nlouro            #+#    #+#             */
-/*   Updated: 2022/04/18 22:18:37 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/26 12:00:54 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@
 
 typedef struct Philo 
 {
-	int	number_of_philosophers;
+	int	nr_of_philos;
 	int	time_to_die;
 	int	time_to_eat;
 	int	time_to_sleep;
-	int	number_of_times_each_philosopher_must_eat;
+	int	nr_of_times_philo_must_eat;
 	int	stime;
 }	t_Philo;
 
