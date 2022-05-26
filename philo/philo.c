@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/26 15:36:16 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/26 16:47:17 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ int	parse_user_input(int argc, char **argv, t_Philo *philos)
 		philos->nr_of_times_philo_must_eat = ft_atoi(argv[5]);
 		printf("nr_of_times_philo_must_eat (opt): %d\n", philos->nr_of_times_philo_must_eat);
 	}
+	else
+		//TODO: handle case 
+		philos->nr_of_times_philo_must_eat = INT_MAX;
 	return (0);
 }
 
@@ -62,15 +65,28 @@ void	init_forks(t_Philo *philos)
 void *start_philo(void *args)
 {
 	t_Philo *ph;
-	ph = (t_Philo *)args;
+	int	philo_id;
+	int	repeat;
 
-	printf("nr_of_philos: %d\n", ph->nr_of_philos);
-	log_take_fork(1,0);
-	//log_take_fork(1,100);
-	//sleep(1);
-	//log_put_fork(1,200);
-	//log_sleep(1,300);
-	//log_think(1,400);
+	ph = (t_Philo *)args;
+	repeat = ph->nr_of_times_philo_must_eat;
+	//FIXME
+	philo_id = 1;
+	//printf("nr_of_philos: %d\n", ph->nr_of_philos);
+	while (repeat > 0)
+	{
+		//TODO: get forks
+		log_take_fork(ph->stime, philo_id);
+		log_eat(ph->stime, philo_id);
+		usleep(ph->time_to_eat);
+		//TODO: put forks
+		log_put_fork(ph->stime, philo_id);
+		log_sleep(ph->stime, philo_id);
+		usleep(ph->time_to_sleep);
+		log_think(ph->stime, philo_id);
+		if (repeat < INT_MAX)
+			repeat--;
+	}
 	return (NULL);
 }
 
@@ -114,14 +130,14 @@ int	main(int argc, char **argv)
 	t_Philo	philos;
 	struct timeval current_time;
 
-	gettimeofday(&current_time, NULL);
-	printf("seconds : %ld\nmicro seconds : %d\n", current_time.tv_sec, current_time.tv_usec);
 	error = parse_user_input(argc, argv, &philos);
 	init_forks(&philos);
 	// TODO validate_user_input(t_Philo);
 	if (error == 1)
 		return (1);
+	gettimeofday(&current_time, NULL);
+	printf("seconds : %ld micro seconds : %d\n", current_time.tv_sec, current_time.tv_usec);
+	philos.stime = current_time.tv_sec;
 	create_threads(&philos);
-	printf("seconds : %ld\nmicro seconds : %d\n", current_time.tv_sec, current_time.tv_usec);
 	return (0);
 }
