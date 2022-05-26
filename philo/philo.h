@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:49 by nlouro            #+#    #+#             */
-/*   Updated: 2022/04/17 23:55:22 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/04/18 22:18:37 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct Philo
 	int	time_to_eat;
 	int	time_to_sleep;
 	int	number_of_times_each_philosopher_must_eat;
+	int	stime;
 }	t_Philo;
 
 int		ft_atoi(const char *str);

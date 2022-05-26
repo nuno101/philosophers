@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/04/17 23:53:33 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/04/18 22:27:33 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,31 @@ int	parse_user_input(int argc, char **argv, struct Philo t_Philo)
 	return (0);
 }
 
+void *threadFunc(void *arg)
+{
+	sleep(10);
+	printf("micro seconds : %d\n", (int) arg);
+	return NULL;
+}
+
+void	create_threads(struct Philo t_Philo)
+{
+	pthread_t	thread_id;
+	struct	timeval current_time;
+	int		error;
+
+	gettimeofday(&current_time, NULL);
+	t_Philo.stime = current_time.tv_usec;
+	// Create a thread calling threadFunc()
+	error = pthread_create(&thread_id, NULL, &threadFunc, &t_Philo);
+	if (error)
+	    printf("Thread creation failed\n");
+	else
+	    printf("Thread created with id %d\n", (int) thread_id);
+	// Wait for thread to exit
+	error = pthread_join(thread_id, NULL);
+}
+
 int	main(int argc, char **argv)
 {
 	int	error;
@@ -50,6 +75,7 @@ int	main(int argc, char **argv)
 	error = parse_user_input(argc, argv, t_Philo);
 	if (error == 1)
 		return (1);
-	//start_threads(number_of_philosophers);
+	create_threads(t_Philo);
+	getchar();	
 	return (0);
 }
