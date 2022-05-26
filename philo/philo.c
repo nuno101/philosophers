@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/26 17:09:15 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/26 18:02:37 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,16 @@ int	parse_user_input(int argc, char **argv, t_Philo *philos)
 	return (0);
 }
 
-pthread_mutex_t	init_mutex()
-{
-	pthread_mutex_t	mutex;
-
-	pthread_mutex_init(&mutex, NULL);
-	return (mutex);
-}
-
-void	init_forks(t_Philo *philos)
+void	init_mutex_forks(t_Philo *philos)
 {
 	int	i;
+	pthread_mutex_t	mutexes[philos->nr_of_philos];
 
 	i = 0;
 	philos->forks_ar = malloc(philos->nr_of_philos * sizeof(pthread_mutex_t));
 	while (i < philos->nr_of_philos)
 	{
-		//philos->forks_ar[0] = init_mutex();
+		philos->forks_ar[i] =  pthread_mutex_init(&mutexes[i], NULL);
 		i++;
 	}
 }
@@ -70,15 +63,17 @@ void *start_philo(void *args)
 
 	ph = (t_Philo *)args;
 	repeat = ph->nr_of_times_philo_must_eat;
-	philo_id = ph->philo_id;
-	ph->philo_id++;
+	philo_id = ph->philo_id++;
+	//ph->philo_id++;
 	while (repeat > 0)
 	{
 		//TODO: get forks
+		get_forks(ph, philo_id);
 		log_take_fork(ph->stime, philo_id);
 		log_eat(ph->stime, philo_id);
 		usleep(ph->time_to_eat);
 		//TODO: put forks
+		put_forks(ph, philo_id);
 		log_put_fork(ph->stime, philo_id);
 		log_sleep(ph->stime, philo_id);
 		usleep(ph->time_to_sleep);
@@ -94,21 +89,19 @@ void	create_threads(t_Philo *philos)
 	pthread_t	threads[philos->nr_of_philos];
 	struct	timeval current_time;
 	int		i;
-	int		error;
 	int		errno;
 
 	i = 0;
 	gettimeofday(&current_time, NULL);
 	philos->stime = current_time.tv_usec;
-	philos->philo_id = i;
 	// Create a thread per philosopher calling start_philo()
 	while (i < philos->nr_of_philos)
 	{
-		error = pthread_create(&threads[i], NULL, &start_philo, philos);
-		if (error)
+		errno = pthread_create(&threads[i], NULL, &start_philo, philos);
+		if (errno != 0)
 	    	printf("Thread creation failed\n");
-		else
-		    printf("Thread %d created with id %d\n", i, (int) threads[i]);
+		//else
+		//    printf("Thread %d created with id %d\n", i+1, (int) threads[i]);
 		i++;
 	}
 	// Wait for threads to finish
@@ -118,8 +111,8 @@ void	create_threads(t_Philo *philos)
             printf("pthread_join() [%d] failed\n", i);
             //return (1);
         }
-		else
-            printf("pthread_join() [%d] ok\n", i);
+		//else
+        //    printf("pthread_join() [%d] ok\n", i);
     }
 }
 
@@ -127,16 +120,13 @@ int	main(int argc, char **argv)
 {
 	int	error;
 	t_Philo	philos;
-	struct timeval current_time;
 
 	error = parse_user_input(argc, argv, &philos);
-	init_forks(&philos);
+	philos.philo_id = 1;
+	init_mutex_forks(&philos);
 	// TODO validate_user_input(t_Philo);
 	if (error == 1)
 		return (1);
-	gettimeofday(&current_time, NULL);
-	printf("seconds : %ld micro seconds : %d\n", current_time.tv_sec, current_time.tv_usec);
-	philos.stime = current_time.tv_sec;
 	create_threads(&philos);
 	return (0);
 }

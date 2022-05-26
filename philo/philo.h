@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:49 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/26 17:07:33 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/26 17:59:16 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,9 @@ typedef struct Philo
 	int	stime;
 }	t_Philo;
 
-/*
-typedef struct Person
-{
-	t_Philo	philo;
-	int	philo_id;
-}	t_Person;
-*/
-
 int		ft_atoi(const char *str);
+void	get_forks(t_Philo *philos, int philo_id);
+void	put_forks(t_Philo *philos, int philo_id);
 void	log_take_fork(int philo, int timestamp);
 void	log_put_fork(int philo, int timestamp);
 void	log_eat(int philo, int timestamp);
