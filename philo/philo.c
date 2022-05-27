@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/26 19:38:20 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/27 10:14:35 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	init_mutex_forks(t_Philo *philos)
 	philos->forks_ar = malloc(philos->nr_of_philos * sizeof(pthread_mutex_t));
 	while (i < philos->nr_of_philos)
 	{
+		//printf("fork i=%d initialised\n", i);
 		pthread_mutex_init(&mutexes[i], NULL);
 		philos->forks_ar[i] = mutexes[i];
 		i++;
@@ -68,11 +69,11 @@ void *start_philo(void *args)
 	//ph->philo_id++;
 	while (repeat > 0)
 	{
-		pick_forks(ph, philo_id);
+		pick_forks(ph, philo_id - 1);
 		log_take_fork(ph->stime, philo_id);
 		log_eat(ph->stime, philo_id);
 		usleep(ph->time_to_eat);
-		put_forks(ph, philo_id);
+		put_forks(ph, philo_id - 1);
 		log_put_fork(ph->stime, philo_id);
 		log_sleep(ph->stime, philo_id);
 		usleep(ph->time_to_sleep);
