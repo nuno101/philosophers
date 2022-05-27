@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/27 13:03:30 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/27 15:50:52 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,12 @@ void	*start_philo(void *args)
 	while (repeat > 0)
 	{
 		pick_forks(ph, philo_id - 1);
-		log_eat(ph->stime, philo_id);
+		log_eat(ph, philo_id);
 		usleep(ph->time_to_eat);
 		put_forks(ph, philo_id - 1);
-		log_sleep(ph->stime, philo_id);
+		log_sleep(ph, philo_id);
 		usleep(ph->time_to_sleep);
-		log_think(ph->stime, philo_id);
+		log_think(ph, philo_id);
 		if (repeat < INT_MAX)
 			repeat--;
 	}
@@ -95,14 +95,12 @@ void	*start_philo(void *args)
 void	create_threads(t_Philo *philos)
 {
 	pthread_t		*threads;
-	struct timeval	current_time;
 	int				i;
 	int				errno;
 
 	i = 0;
 	threads = malloc(philos->nr_of_philos * sizeof(pthread_t));
-	gettimeofday(&current_time, NULL);
-	philos->stime = current_time.tv_usec;
+	set_time_zero(philos);
 	while (i < philos->nr_of_philos)
 	{
 		errno = pthread_create(&threads[i], NULL, &start_philo, philos);

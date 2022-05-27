@@ -6,20 +6,33 @@
 /*   By: nlouro <nlouro@student.42heilbronnde>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 12:22:20 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/27 12:42:48 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/27 15:52:29 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	get_relative_time(int stime)
+void	set_time_zero(t_Philo *ph)
 {
 	struct timeval	current_time;
 
 	gettimeofday(&current_time, NULL);
+	ph->stime = current_time.tv_sec;
+	ph->utime = current_time.tv_usec;
 	if (VERBOSE > 1)
-		printf("s: %ld ms: %d\n", current_time.tv_sec, current_time.tv_usec);
-	return (current_time.tv_usec - stime);
+		printf("sec: %ld usec: %d\n", current_time.tv_sec, current_time.tv_usec);
+}
+
+int	get_relative_time(t_Philo *ph)
+{
+	struct timeval	current_time;
+	int				sec_from_zero;
+	int				usec_from_zero;
+
+	gettimeofday(&current_time, NULL);
+	sec_from_zero = current_time.tv_sec - ph->stime;
+	usec_from_zero = current_time.tv_usec - ph->utime;
+	return (sec_from_zero * 1000000 + usec_from_zero);
 }
 
 void	log_input_params(int argc, t_Philo *philos)
@@ -32,10 +45,10 @@ void	log_input_params(int argc, t_Philo *philos)
 		printf("times_must_eat (opt): %d\n", philos->times_must_eat);
 }
 
-void	log_put_fork(int stime, int philo)
+void	log_put_fork(t_Philo *ph, int philo_id)
 {
 	int	timestamp;
 
-	timestamp = get_relative_time(stime);
-	printf("%dms %d has released its forks\n", timestamp, philo);
+	timestamp = get_relative_time(ph);
+	printf("%dms %d has released its forks\n", timestamp, philo_id);
 }
