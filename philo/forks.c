@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronnde>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 17:53:59 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/27 10:14:45 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/27 10:50:04 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,7 @@ int	lock_fork(t_Philo *ph, int fork_i)
 		printf("pthread_mutex_lock failed\n");
 	return (errno);
 }
-	errno = lock_fork(ph, fork1);
-	if (errno == 0)
-		errno = lock_fork(ph, fork2);
-	if (errno != 0)
-		 pthread_mutex_unlock(&ph->forks_ar[fork1]);
-		 */
+*/
 
 int	pick_forks(t_Philo *ph, int philo_id)
 {

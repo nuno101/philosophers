@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/27 10:14:35 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/27 11:11:27 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,10 @@ void	init_mutex_forks(t_Philo *philos)
 	}
 }
 
+/*
+ * Philo life manager
+ * wait for all threads to be created before starting
+ */
 void *start_philo(void *args)
 {
 	t_Philo *ph;
@@ -67,6 +71,8 @@ void *start_philo(void *args)
 	repeat = ph->nr_of_times_philo_must_eat;
 	philo_id = ph->philo_id++;
 	//ph->philo_id++;
+	while (ph->nr_threads_created < ph->nr_of_philos)
+		usleep(5);
 	while (repeat > 0)
 	{
 		pick_forks(ph, philo_id - 1);
@@ -102,6 +108,7 @@ void	create_threads(t_Philo *philos)
 	    	printf("Thread creation failed\n");
 		//else
 		//    printf("Thread %d created with id %d\n", i+1, (int) threads[i]);
+		philos->nr_threads_created++;
 		i++;
 	}
 	// Wait for threads to finish
@@ -123,6 +130,7 @@ int	main(int argc, char **argv)
 
 	error = parse_user_input(argc, argv, &philos);
 	philos.philo_id = 1;
+	philos.nr_threads_created = 0;
 	init_mutex_forks(&philos);
 	// TODO validate_user_input(t_Philo);
 	if (error == 1)
