@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/17 07:14:39 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/26 16:29:07 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/27 11:46:39 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,15 @@ int	get_relative_time(int stime)
 	return (current_time.tv_usec - stime);
 }
 
-void	log_take_fork(int stime, int philo)
+void	log_take_fork(int stime, int philo, int fork_index)
 {
 	int	timestamp;
 
 	timestamp = get_relative_time(stime);
-	printf("%dms %d has taken a fork\n", timestamp, philo);
+	if (DEBUG)
+		printf("%dms %d has taken fork f%d\n", timestamp, philo, fork_index + 1);
+	else
+		printf("%dms %d has taken a fork\n", timestamp, philo);
 } 
 
 void	log_put_fork(int stime, int philo)
@@ -34,7 +37,7 @@ void	log_put_fork(int stime, int philo)
 	int	timestamp;
 
 	timestamp = get_relative_time(stime);
-	printf("%dms %d has released a fork\n", timestamp, philo);
+	printf("%dms %d has released its forks\n", timestamp, philo);
 } 
 
 void	log_eat(int stime, int philo)

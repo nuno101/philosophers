@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/27 11:11:27 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/27 11:41:38 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ int	parse_user_input(int argc, char **argv, t_Philo *philos)
 	}
 	if (argc > 5)
 	{
-		philos->nr_of_times_philo_must_eat = ft_atoi(argv[5]);
-		printf("nr_of_times_philo_must_eat (opt): %d\n", philos->nr_of_times_philo_must_eat);
+		philos->times_must_eat = ft_atoi(argv[5]);
+		printf("times_must_eat (opt): %d\n", philos->times_must_eat);
 	}
 	else
-		//TODO: handle case
-		philos->nr_of_times_philo_must_eat = INT_MAX;
+		//TODO: consider handling this differently 
+		philos->times_must_eat = INT_MAX;
 	return (0);
 }
 
@@ -47,12 +47,11 @@ void	init_mutex_forks(t_Philo *philos)
 	pthread_mutex_t	mutexes[philos->nr_of_philos];
 
 	i = 0;
-	philos->forks_ar = malloc(philos->nr_of_philos * sizeof(pthread_mutex_t));
+	philos->forks = malloc(philos->nr_of_philos * sizeof(pthread_mutex_t));
 	while (i < philos->nr_of_philos)
 	{
-		//printf("fork i=%d initialised\n", i);
 		pthread_mutex_init(&mutexes[i], NULL);
-		philos->forks_ar[i] = mutexes[i];
+		philos->forks[i] = mutexes[i];
 		i++;
 	}
 }
@@ -68,19 +67,19 @@ void *start_philo(void *args)
 	int	repeat;
 
 	ph = (t_Philo *)args;
-	repeat = ph->nr_of_times_philo_must_eat;
-	philo_id = ph->philo_id++;
+	repeat = ph->times_must_eat;
+	philo_id = ph->philos_count++;
 	//ph->philo_id++;
-	while (ph->nr_threads_created < ph->nr_of_philos)
+	while (ph->threads_count < ph->nr_of_philos)
 		usleep(5);
 	while (repeat > 0)
 	{
 		pick_forks(ph, philo_id - 1);
-		log_take_fork(ph->stime, philo_id);
+		//log_take_fork(ph->stime, philo_id);
 		log_eat(ph->stime, philo_id);
 		usleep(ph->time_to_eat);
 		put_forks(ph, philo_id - 1);
-		log_put_fork(ph->stime, philo_id);
+		//log_put_fork(ph->stime, philo_id);
 		log_sleep(ph->stime, philo_id);
 		usleep(ph->time_to_sleep);
 		log_think(ph->stime, philo_id);
@@ -108,7 +107,7 @@ void	create_threads(t_Philo *philos)
 	    	printf("Thread creation failed\n");
 		//else
 		//    printf("Thread %d created with id %d\n", i+1, (int) threads[i]);
-		philos->nr_threads_created++;
+		philos->threads_count++;
 		i++;
 	}
 	// Wait for threads to finish
@@ -129,8 +128,8 @@ int	main(int argc, char **argv)
 	t_Philo	philos;
 
 	error = parse_user_input(argc, argv, &philos);
-	philos.philo_id = 1;
-	philos.nr_threads_created = 0;
+	philos.philos_count = 1;
+	philos.threads_count = 0;
 	init_mutex_forks(&philos);
 	// TODO validate_user_input(t_Philo);
 	if (error == 1)
