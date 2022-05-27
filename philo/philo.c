@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/27 15:50:52 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/27 17:19:04 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	*start_philo(void *args)
 	repeat = ph->times_must_eat;
 	philo_id = ph->philos_count++;
 	while (ph->threads_count < ph->nr_of_philos)
-		usleep(5);
+		usleep(100);
 	while (repeat > 0)
 	{
 		pick_forks(ph, philo_id - 1);
@@ -100,7 +100,6 @@ void	create_threads(t_Philo *philos)
 
 	i = 0;
 	threads = malloc(philos->nr_of_philos * sizeof(pthread_t));
-	set_time_zero(philos);
 	while (i < philos->nr_of_philos)
 	{
 		errno = pthread_create(&threads[i], NULL, &start_philo, philos);
@@ -109,6 +108,8 @@ void	create_threads(t_Philo *philos)
 		else
 			if (VERBOSE > 1)
 				printf("Thread %d created - id %d\n", i + 1, (int) threads[i]);
+		if (philos->threads_count + 1 ==  philos->nr_of_philos)
+			set_time_zero(philos);
 		philos->threads_count++;
 		i++;
 	}
