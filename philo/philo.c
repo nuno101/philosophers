@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/27 12:43:46 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/27 13:03:30 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,10 @@ int	parse_user_input(int argc, char **argv, t_Philo *philos)
 void	init_mutex_forks(t_Philo *philos)
 {
 	int				i;
-	pthread_mutex_t	mutexes[philos->nr_of_philos];
+	pthread_mutex_t	*mutexes;
 
 	i = 0;
+	mutexes = malloc(philos->nr_of_philos * sizeof(pthread_mutex_t));
 	philos->forks = malloc(philos->nr_of_philos * sizeof(pthread_mutex_t));
 	while (i < philos->nr_of_philos)
 	{
@@ -93,18 +94,19 @@ void	*start_philo(void *args)
  */
 void	create_threads(t_Philo *philos)
 {
-	pthread_t		threads[philos->nr_of_philos];
+	pthread_t		*threads;
 	struct timeval	current_time;
 	int				i;
 	int				errno;
 
 	i = 0;
+	threads = malloc(philos->nr_of_philos * sizeof(pthread_t));
 	gettimeofday(&current_time, NULL);
 	philos->stime = current_time.tv_usec;
 	while (i < philos->nr_of_philos)
 	{
 		errno = pthread_create(&threads[i], NULL, &start_philo, philos);
-		if (errno != 0 && VERBOSE)
+		if (errno != 0 && VERBOSE > 0)
 			printf("Thread creation failed\n");
 		else
 			if (VERBOSE > 1)
@@ -115,7 +117,7 @@ void	create_threads(t_Philo *philos)
 	while (i-- > 0)
 	{
 		errno = pthread_join(threads[i], NULL);
-		if (errno != 0 && VERBOSE)
+		if (errno != 0 && VERBOSE > 0)
 			printf("pthread_join() [%d] failed\n", i);
 	}
 }
