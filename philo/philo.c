@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/27 12:21:33 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/27 12:43:46 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,13 @@ int	parse_user_input(int argc, char **argv, t_Philo *philos)
 		philos->time_to_die = ft_atoi(argv[2]);
 		philos->time_to_eat = ft_atoi(argv[3]);
 		philos->time_to_sleep = ft_atoi(argv[4]);
-		printf("nr_of_philosophers: %d\n", philos->nr_of_philos);
-		printf("time_to_die: %d\n", philos->time_to_die);
-		printf("time_to_eat: %d\n", philos->time_to_eat);
-		printf("time_to_sleep: %d\n", philos->time_to_sleep);
 	}
 	if (argc > 5)
-	{
 		philos->times_must_eat = ft_atoi(argv[5]);
-		printf("times_must_eat (opt): %d\n", philos->times_must_eat);
-	}
 	else
 		philos->times_must_eat = INT_MAX;
+	if (VERBOSE)
+		log_input_params(argc, philos);
 	return (0);
 }
 
@@ -131,11 +126,11 @@ int	main(int argc, char **argv)
 	t_Philo	philos;
 
 	error = parse_user_input(argc, argv, &philos);
+	if (error == 1)
+		return (1);
 	philos.philos_count = 1;
 	philos.threads_count = 0;
 	init_mutex_forks(&philos);
-	if (error == 1)
-		return (1);
 	create_threads(&philos);
 	return (0);
 }
