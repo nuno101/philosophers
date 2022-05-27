@@ -6,12 +6,16 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/27 11:41:38 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/05/27 12:21:33 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+/*
+ * parse user input
+ * TODO: consider handling lack of times_must_eat argument differently 
+ */
 int	parse_user_input(int argc, char **argv, t_Philo *philos)
 {
 	if (argc < 5)
@@ -36,14 +40,13 @@ int	parse_user_input(int argc, char **argv, t_Philo *philos)
 		printf("times_must_eat (opt): %d\n", philos->times_must_eat);
 	}
 	else
-		//TODO: consider handling this differently 
 		philos->times_must_eat = INT_MAX;
 	return (0);
 }
 
 void	init_mutex_forks(t_Philo *philos)
 {
-	int	i;
+	int				i;
 	pthread_mutex_t	mutexes[philos->nr_of_philos];
 
 	i = 0;
@@ -59,27 +62,25 @@ void	init_mutex_forks(t_Philo *philos)
 /*
  * Philo life manager
  * wait for all threads to be created before starting
+ * TODO consider setting philo_id in a more clear way 
  */
-void *start_philo(void *args)
+void	*start_philo(void *args)
 {
-	t_Philo *ph;
-	int	philo_id;
-	int	repeat;
+	t_Philo	*ph;
+	int		philo_id;
+	int		repeat;
 
 	ph = (t_Philo *)args;
 	repeat = ph->times_must_eat;
 	philo_id = ph->philos_count++;
-	//ph->philo_id++;
 	while (ph->threads_count < ph->nr_of_philos)
 		usleep(5);
 	while (repeat > 0)
 	{
 		pick_forks(ph, philo_id - 1);
-		//log_take_fork(ph->stime, philo_id);
 		log_eat(ph->stime, philo_id);
 		usleep(ph->time_to_eat);
 		put_forks(ph, philo_id - 1);
-		//log_put_fork(ph->stime, philo_id);
 		log_sleep(ph->stime, philo_id);
 		usleep(ph->time_to_sleep);
 		log_think(ph->stime, philo_id);
@@ -89,49 +90,50 @@ void *start_philo(void *args)
 	return (NULL);
 }
 
+/*
+ * Parse user input
+ * TODO validate_user_input(t_Philo);
+ * Create a thread per philosopher calling start_philo()
+ * Wait for threads to finish to call pthread_join()
+ */
 void	create_threads(t_Philo *philos)
 {
-	pthread_t	threads[philos->nr_of_philos];
-	struct	timeval current_time;
-	int		i;
-	int		errno;
+	pthread_t		threads[philos->nr_of_philos];
+	struct timeval	current_time;
+	int				i;
+	int				errno;
 
 	i = 0;
 	gettimeofday(&current_time, NULL);
 	philos->stime = current_time.tv_usec;
-	// Create a thread per philosopher calling start_philo()
 	while (i < philos->nr_of_philos)
 	{
 		errno = pthread_create(&threads[i], NULL, &start_philo, philos);
-		if (errno != 0)
-	    	printf("Thread creation failed\n");
-		//else
-		//    printf("Thread %d created with id %d\n", i+1, (int) threads[i]);
+		if (errno != 0 && VERBOSE)
+			printf("Thread creation failed\n");
+		else
+			if (VERBOSE > 1)
+				printf("Thread %d created - id %d\n", i + 1, (int) threads[i]);
 		philos->threads_count++;
 		i++;
 	}
-	// Wait for threads to finish
 	while (i-- > 0)
-    {
-        if (0 != (errno = pthread_join(threads[i], NULL))) {
-            printf("pthread_join() [%d] failed\n", i);
-            //return (1);
-        }
-		//else
-        //    printf("pthread_join() [%d] ok\n", i);
-    }
+	{
+		errno = pthread_join(threads[i], NULL);
+		if (errno != 0 && VERBOSE)
+			printf("pthread_join() [%d] failed\n", i);
+	}
 }
 
 int	main(int argc, char **argv)
 {
-	int	error;
+	int		error;
 	t_Philo	philos;
 
 	error = parse_user_input(argc, argv, &philos);
 	philos.philos_count = 1;
 	philos.threads_count = 0;
 	init_mutex_forks(&philos);
-	// TODO validate_user_input(t_Philo);
 	if (error == 1)
 		return (1);
 	create_threads(&philos);
