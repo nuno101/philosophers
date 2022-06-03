@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/03 18:12:51 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/03 20:26:55 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,10 @@ void	*start_watcher(void *args)
 	int		now;
 	int		time_since_eating;
 	int		serving;
-	int		i;
 	int		philos_done;
 
 	ph = (t_Philo *)args;
 	serving = 1;
-	i = 0;
 	philos_done = 0;
 	while (ph->stime == 0)
 		usleep(10);
@@ -184,6 +182,7 @@ int	main(int argc, char **argv)
 	init_mutex_forks(&philos);
 	create_threads(&philos);
 	//TODO: free philos->forks and mutexes
-	getchar();
+	printf("All done eating %d time(s)\n", philos.times_must_eat);
+	//getchar();
 	return (0);
 }
