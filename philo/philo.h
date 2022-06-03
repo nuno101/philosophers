@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:49 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/27 15:32:50 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/03 09:05:19 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,11 @@ typedef struct Philo
 	int				time_to_sleep;
 	int				times_must_eat;
 	pthread_mutex_t	*forks;
-	int				threads_count;
 	int				philos_count;
 	int				stime;
 	int				utime;
+	int				*meals_eaten;
+	int				*last_meal;
 }	t_Philo;
 
 int		ft_atoi(const char *str);
@@ -47,6 +48,6 @@ void	log_put_fork(t_Philo *ph, int philo_id);
 void	log_eat(t_Philo *ph, int philo_id);
 void	log_sleep(t_Philo *ph, int philo_id);
 void	log_think(t_Philo *ph, int philo_id);
-void	log_die(t_Philo *ph, int philo_id);
+void	log_death(t_Philo *ph, int philo_id);
 
 #endif
