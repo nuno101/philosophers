@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/03 09:34:08 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/03 18:12:51 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,8 @@ void	*start_watcher(void *args)
 		}
 		if (philos_done == ph->nr_of_philos)
 			serving = 0;
-		else
-			usleep(50);
+		//else
+		//	usleep(10);
 	}
 	return (NULL);
 }
@@ -116,7 +116,8 @@ void	*start_philo(void *args)
 	{
 		pick_forks(ph, philo_id - 1);
 		log_eat(ph, philo_id);
-		//printf("%d ate at: %d\n", philo_id, ph->last_meal[philo_id]);
+		if (VERBOSE)
+			printf("%d ate at: %d\n", philo_id, ph->last_meal[philo_id - 1]);
 		put_forks(ph, philo_id - 1);
 		log_sleep(ph, philo_id);
 		log_think(ph, philo_id);
@@ -130,6 +131,7 @@ void	*start_philo(void *args)
 /*
  * Parse user input
  * Create a thread per philosopher calling start_philo()
+ * Initialise print mutex
  * Sets time zero 
  * Wait for threads to finish and call pthread_join()
  */
@@ -152,6 +154,7 @@ void	create_threads(t_Philo *ph)
 		else
 			if (VERBOSE > 1)
 				printf("Thread %d created - id %d\n", i + 1, (int) threads[i]);
+		pthread_mutex_init(&ph->mutex_print, NULL); 
 		if (i ==  ph->nr_of_philos)
 			set_time_zero(ph);
 		i++;
