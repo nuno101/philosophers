@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 14:26:42 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 14:47:09 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ int	parse_user_input(int argc, char **argv, t_Philo *ph)
 		ph->times_must_eat = INT_MAX;
 	if (VERBOSE)
 		log_input_params(argc, ph);
-	if (argc < 5 || ph->time_to_die < 0 || ph->time_to_eat < 0
-		|| ph->time_to_sleep < 0)
+	if (argc < 5 || ph->nr_of_philos <= 0 || ph->time_to_die < 0
+		|| ph->time_to_eat < 0 || ph->time_to_sleep < 0)
 	{
 		printf("Error: missing or invalid arguments\n");
 		return (1);
@@ -58,7 +58,7 @@ void	*start_watcher(void *args)
 	ph = (t_Philo *)args;
 	philos_done_eating = 0;
 	while (ph->stime == 0)
-		usleep(10);
+		usleep(30);
 	while (philos_done_eating < ph->nr_of_philos)
 	{
 		philo_id = 0;
@@ -90,12 +90,12 @@ void	*start_philo(void *args)
 	repeat = ph->times_must_eat;
 	philo_id = ph->philos_count++;
 	while (ph->stime == 0)
-		usleep(100);
+		usleep(30);
 	while (repeat > 0)
 	{
 		pick_forks(ph, philo_id - 1);
 		log_eat(ph, philo_id);
-		if (VERBOSE)
+		if (VERBOSE > 1)
 			printf("%d ate at: %ld\n", philo_id, ph->last_meal[philo_id - 1]);
 		put_forks(ph, philo_id - 1);
 		log_sleep(ph, philo_id);
