@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/17 07:14:39 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 10:56:46 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 11:15:57 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,16 @@ void	log_think(t_Philo *ph, int philo_id)
 	pthread_mutex_unlock(&ph->mutex_print);
 }
 
-void	log_death(t_Philo *ph, int philo_id)
+/*
+ * death of a philosopher ends the simulation
+ * upon exit the OS takes care of releasing the mutex lock
+ */
+void	log_death_and_exit(t_Philo *ph, int philo_id)
 {
 	int	timestamp;
 
 	pthread_mutex_lock(&ph->mutex_print);
 	timestamp = get_relative_time(ph);
 	printf("%dms %d died\n", timestamp, philo_id);
-	pthread_mutex_unlock(&ph->mutex_print);
+	exit(1);
 }

@@ -6,12 +6,16 @@
 /*   By: nlouro <nlouro@student.42heilbronnde>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 12:22:20 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/03 09:37:06 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 12:01:27 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+/*
+ * called after all threads have been created
+ * used to sync the threads start
+ */
 void	set_time_zero(t_Philo *ph)
 {
 	struct timeval	current_time;
@@ -35,20 +39,39 @@ int	get_relative_time(t_Philo *ph)
 	return (sec_from_zero * 1000000 + usec_from_zero);
 }
 
-void	log_input_params(int argc, t_Philo *philos)
+/*
+ * initialize the forks mutexes
+ * these mutexes ensure each fork is only used by a philo at a time
+ * see also free_mutex_forks which frees the memory allocated here
+ */
+void	init_mutex_forks(t_Philo *ph)
 {
-	printf("nr_of_philosophers: %d\n", philos->nr_of_philos);
-	printf("time_to_die: %d\n", philos->time_to_die);
-	printf("time_to_eat: %d\n", philos->time_to_eat);
-	printf("time_to_sleep: %d\n", philos->time_to_sleep);
-	if (argc > 5)
-		printf("times_must_eat (opt): %d\n", philos->times_must_eat);
+	int	i;
+
+	i = 0;
+	ph->mutex_forks = malloc(ph->nr_of_philos * sizeof(pthread_mutex_t));
+	ph->forks = malloc(ph->nr_of_philos * sizeof(pthread_mutex_t));
+	while (i < ph->nr_of_philos)
+	{
+		pthread_mutex_init(&ph->mutex_forks[i], NULL);
+		ph->forks[i] = ph->mutex_forks[i];
+		i++;
+	}
 }
 
-void	log_put_fork(t_Philo *ph, int philo_id)
+/*
+ * free the memory allocated by the init_mutex_forks function
+ */
+void	free_mutex_forks(t_Philo *philos)
 {
-	int	timestamp;
+	int	i;
 
-	timestamp = get_relative_time(ph);
-	printf("%dms %d has released its forks\n", timestamp, philo_id);
+	i = 0;
+	while (i < philos->nr_of_philos)
+	{
+		pthread_mutex_destroy(&philos->forks[i]);
+		i++;
+	}
+	free(philos->forks);
+	free(philos->mutex_forks);
 }

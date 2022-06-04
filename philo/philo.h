@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:49 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 10:55:13 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 12:05:46 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <sys/time.h> // used for gettimeofday
 
 # define INT_MAX 2147483647
-# define VERBOSE 1
+# define VERBOSE 0
 
 typedef struct Philo
 {
@@ -30,6 +30,7 @@ typedef struct Philo
 	int				time_to_sleep;
 	int				times_must_eat;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	*mutex_forks;
 	int				philos_count;
 	int				stime;
 	int				utime;
@@ -41,6 +42,8 @@ typedef struct Philo
 int		ft_atoi(const char *str);
 void	set_time_zero(t_Philo *ph);
 int		get_relative_time(t_Philo *ph);
+void	init_mutex_forks(t_Philo *ph);
+void	free_mutex_forks(t_Philo *philos);
 void	log_input_params(int argc, t_Philo *philos);
 void	pick_forks(t_Philo *philos, int philo_id);
 void	put_forks(t_Philo *philos, int philo_id);
@@ -49,6 +52,6 @@ void	log_put_fork(t_Philo *ph, int philo_id);
 void	log_eat(t_Philo *ph, int philo_id);
 void	log_sleep(t_Philo *ph, int philo_id);
 void	log_think(t_Philo *ph, int philo_id);
-void	log_death(t_Philo *ph, int philo_id);
+void	log_death_and_exit(t_Philo *ph, int philo_id);
 
 #endif

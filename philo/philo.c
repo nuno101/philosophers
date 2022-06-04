@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 10:54:12 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 12:04:34 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /*
  * parse user input
- * TODO: consider handling lack of times_must_eat argument differently 
+ * FIXME: consider handling lack of times_must_eat argument differently 
  */
 int	parse_user_input(int argc, char **argv, t_Philo *philos)
 {
@@ -39,53 +39,37 @@ int	parse_user_input(int argc, char **argv, t_Philo *philos)
 	return (0);
 }
 
-void	init_mutex_forks(t_Philo *philos)
-{
-	int				i;
-	pthread_mutex_t	*mutexes;
-
-	i = 0;
-	mutexes = malloc(philos->nr_of_philos * sizeof(pthread_mutex_t));
-	philos->forks = malloc(philos->nr_of_philos * sizeof(pthread_mutex_t));
-	while (i < philos->nr_of_philos)
-	{
-		pthread_mutex_init(&mutexes[i], NULL);
-		philos->forks[i] = mutexes[i];
-		i++;
-	}
-}
-
+/*
+ * Philo nutrition monitor
+ * Waits for all threads to be ready (stime > 0) to start
+ * Checks whether each philosopher has starved to death
+ * Thread ends when:
+ * 1) if case a philo starves by calling log_death_and_exit
+ * 2) when all philosophers have eaten [ph->times_must_eat] times
+ */
 void	*start_watcher(void *args)
 {
 	t_Philo	*ph;
 	int		philo_id;
 	int		time_since_eating;
-	int		serving;
-	int		philos_done;
+	int		philos_done_eating;
 
 	ph = (t_Philo *)args;
-	serving = 1;
-	philos_done = 0;
+	philos_done_eating = 0;
 	while (ph->stime == 0)
 		usleep(10);
-	while (serving)
+	while (philos_done_eating < ph->nr_of_philos)
 	{
 		philo_id = 0;
 		while (philo_id < ph->nr_of_philos)
 		{
 			time_since_eating = get_relative_time(ph) - ph->last_meal[philo_id];
 			if (time_since_eating > ph->time_to_die)
-			{
-				log_death(ph, philo_id + 1);
-				philos_done++;
-				exit(1);
-			}
+				log_death_and_exit(ph, philo_id + 1);
 			else if (ph->meals_eaten[philo_id] == ph->times_must_eat)
-				philos_done++;
+				philos_done_eating++;
 			philo_id++;
 		}
-		if (philos_done == ph->nr_of_philos)
-			serving = 0;
 	}
 	return (NULL);
 }
@@ -123,12 +107,10 @@ void	*start_philo(void *args)
 }
 
 /*
- * Parse user input
  * Create a thread per philosopher calling start_philo()
  * Initialise print mutex
  * Sets time zero 
  * Wait for threads to finish and call pthread_join()
-   TODO free threads
  */
 void	create_threads(t_Philo *ph)
 {
@@ -160,10 +142,17 @@ void	create_threads(t_Philo *ph)
 		if (errno != 0 && VERBOSE > 0)
 			printf("pthread_join() [%d] failed\n", i);
 	}
+	pthread_mutex_destroy(&ph->mutex_print);
+	free(threads);
 }
 
+/*
+ * Parse user input
 // TODO validate_user_input(t_Philo);
-//TODO: free philos->forks and mutexes
+ * Initilise philos struct 
+ * Create all threads
+ * Free memory allocated
+ */
 int	main(int argc, char **argv)
 {
 	int		error;
@@ -178,6 +167,13 @@ int	main(int argc, char **argv)
 	philos.meals_eaten = malloc(philos.nr_of_philos * sizeof(int));
 	init_mutex_forks(&philos);
 	create_threads(&philos);
-	printf("All done eating %d time(s)\n", philos.times_must_eat);
+	free(philos.last_meal);
+	free(philos.meals_eaten);
+	free_mutex_forks(&philos);
+	if (VERBOSE > 0)
+	{
+		printf("All done eating %d time(s)\n", philos.times_must_eat);
+		getchar();
+	}
 	return (0);
 }
