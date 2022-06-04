@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 14:47:09 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 14:50:17 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ int	parse_user_input(int argc, char **argv, t_Philo *ph)
 		ph->times_must_eat = ft_atoi(argv[5]);
 	else
 		ph->times_must_eat = INT_MAX;
-	if (VERBOSE)
-		log_input_params(argc, ph);
 	if (argc < 5 || ph->nr_of_philos <= 0 || ph->time_to_die < 0
 		|| ph->time_to_eat < 0 || ph->time_to_sleep < 0)
 	{
 		printf("Error: missing or invalid arguments\n");
 		return (1);
 	}
+	if (VERBOSE)
+		log_input_params(argc, ph);
 	return (0);
 }
 
