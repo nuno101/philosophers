@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 19:30:46 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 20:27:41 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,7 @@ void	*start_watcher(void *args)
 	ph = (t_Philo *)args;
 	philos_done_eating = 0;
 	while (ph->stime == 0)
-		usleep(ph->time_to_die * 900);
-		//my_msleep(ph->time_to_die * 0.9);
+		usleep(ph->time_to_die);
 	while (philos_done_eating < ph->nr_of_philos)
 	{
 		philo_id = 0;
@@ -94,7 +93,6 @@ void	*start_philo(void *args)
 		usleep(100);
 	if (philo_id % 2 != 0)
 		usleep(ph->time_to_eat * 1000);
-		//my_msleep(ph->time_to_eat);
 	while (repeat > 0)
 	{
 		pick_forks(ph, philo_id - 1);

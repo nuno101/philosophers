@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/17 07:14:39 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 19:31:07 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 20:51:41 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,9 @@ void	log_eat(t_Philo *ph, int philo_id)
 	ph->last_meal[philo_id - 1] = timestamp;
 	printf("%ldms %d is eating\n", timestamp, philo_id);
 	pthread_mutex_unlock(&ph->mutex_print);
-	usleep(ph->time_to_eat * 1000);
-	//my_msleep(ph->time_to_eat);
+	//usleep(ph->time_to_eat * 1000);
+	usleep((ph->time_to_eat - (timestamp - get_rel_time(ph))) * 1000);
+	//sleep_until(timestamp + ph->time_to_eat - get_rel_time(ph));
 }
 
 void	log_sleep(t_Philo *ph, int philo_id)
@@ -50,7 +51,8 @@ void	log_sleep(t_Philo *ph, int philo_id)
 	timestamp = get_rel_time(ph);
 	printf("%ldms %d is sleeping\n", timestamp, philo_id);
 	pthread_mutex_unlock(&ph->mutex_print);
-	usleep(ph->time_to_sleep * 1000);
+	//usleep(ph->time_to_sleep * 1000);
+	usleep((ph->time_to_eat - (timestamp - get_rel_time(ph))) * 1000);
 	//my_msleep(ph->time_to_sleep);
 	//last_meal_end = ph->last_meal[philo_id - 1] + ph->time_to_eat;
 	//printf("%ldms %d is sleeping\n", last_meal_end, philo_id);
