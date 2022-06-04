@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronnde>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 12:22:20 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 12:51:50 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 14:57:44 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void	log_put_fork(t_Philo *ph, int philo_id)
 {
 	int	timestamp;
 
+	pthread_mutex_lock(&ph->mutex_print);
 	timestamp = get_rel_time(ph);
 	printf("%dms %d has released its forks\n", timestamp, philo_id);
+	pthread_mutex_unlock(&ph->mutex_print);
 }

@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/17 07:14:39 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 12:50:56 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 14:57:16 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,13 @@ void	log_take_fork(t_Philo *ph, int philo_id, int fork_index)
 {
 	long	timestamp;
 
+	pthread_mutex_lock(&ph->mutex_print);
 	timestamp = get_rel_time(ph);
 	if (VERBOSE)
 		printf("%ldms %d took fork f%d\n", timestamp, philo_id, fork_index + 1);
 	else
 		printf("%ldms %d has taken a fork\n", timestamp, philo_id);
+	pthread_mutex_unlock(&ph->mutex_print);
 }
 
 void	log_eat(t_Philo *ph, int philo_id)
