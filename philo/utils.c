@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronnde>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 12:22:20 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 18:44:13 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 19:20:29 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,17 @@ long	get_rel_time(t_Philo *ph)
 	return (sec_from_zero * 1000 + usec_from_zero/1000);
 }
 
-void	my_usleep(int duration)
+void	my_msleep(int milisecs)
 {
-	//printf("my_usleep: %d\n", duration/1000);
-	while (duration > 500)
+	int	usecs;
+
+	usecs = milisecs * 1000;
+	while (usecs > 500)
 	{
 		usleep(500);
-		duration -= 500;
+		usecs -= 500;
 	}
-	usleep(duration);
+	usleep(usecs);
 }
 
 /*

@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:49 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 18:55:19 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 19:19:00 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct Philo
 int		ft_atoi(const char *str);
 void	set_time_zero(t_Philo *ph);
 long	get_rel_time(t_Philo *ph);
-void	my_usleep(int duration);
+void	my_msleep(int milisecs);
 void	init_mutex_forks(t_Philo *ph);
 void	free_mutex_forks(t_Philo *philos);
 void	log_input_params(int argc, t_Philo *philos);
