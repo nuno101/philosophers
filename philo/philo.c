@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 12:54:58 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 14:26:42 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,29 @@
 
 /*
  * parse user input
- * FIXME: consider handling lack of times_must_eat argument differently 
+ * NOTE: consider handling lack of times_must_eat argument differently 
  */
-int	parse_user_input(int argc, char **argv, t_Philo *philos)
+int	parse_user_input(int argc, char **argv, t_Philo *ph)
 {
-	if (argc < 5)
+	if (argc >= 5)
 	{
-		printf("Error: missing arguments\n");
-		return (1);
-	}
-	else
-	{
-		philos->nr_of_philos = ft_atoi(argv[1]);
-		philos->time_to_die = ft_atoi(argv[2]);
-		philos->time_to_eat = ft_atoi(argv[3]);
-		philos->time_to_sleep = ft_atoi(argv[4]);
+		ph->nr_of_philos = ft_atoi(argv[1]);
+		ph->time_to_die = ft_atoi(argv[2]);
+		ph->time_to_eat = ft_atoi(argv[3]);
+		ph->time_to_sleep = ft_atoi(argv[4]);
 	}
 	if (argc > 5)
-		philos->times_must_eat = ft_atoi(argv[5]);
+		ph->times_must_eat = ft_atoi(argv[5]);
 	else
-		philos->times_must_eat = INT_MAX;
+		ph->times_must_eat = INT_MAX;
 	if (VERBOSE)
-		log_input_params(argc, philos);
+		log_input_params(argc, ph);
+	if (argc < 5 || ph->time_to_die < 0 || ph->time_to_eat < 0
+		|| ph->time_to_sleep < 0)
+	{
+		printf("Error: missing or invalid arguments\n");
+		return (1);
+	}
 	return (0);
 }
 
@@ -109,7 +110,7 @@ void	*start_philo(void *args)
 /*
  * Create a thread per philosopher calling start_philo()
  * Initialise print mutex
- * Sets time zero 
+ * Sets time zero starting all threads tasks
  * Wait for threads to finish and call pthread_join()
  */
 void	create_threads(t_Philo *ph)
@@ -128,27 +129,21 @@ void	create_threads(t_Philo *ph)
 			errno = pthread_create(&threads[i], NULL, &start_watcher, ph);
 		if (errno != 0 && VERBOSE > 0)
 			printf("Thread creation failed\n");
-		else
-			if (VERBOSE > 1)
-				printf("Thread %d created - id %d\n", i + 1, (int) threads[i]);
+		else if (errno == 0 && VERBOSE > 1)
+			printf("Thread %d created - id %d\n", i + 1, (int) threads[i]);
 		pthread_mutex_init(&ph->mutex_print, NULL);
-		if (i == ph->nr_of_philos)
-			set_time_zero(ph);
 		i++;
 	}
+	set_time_zero(ph);
 	while (i-- > 0)
-	{
-		errno = pthread_join(threads[i], NULL);
-		if (errno != 0 && VERBOSE > 0)
+		if (pthread_join(threads[i], NULL) != 0 && VERBOSE > 0)
 			printf("pthread_join() [%d] failed\n", i);
-	}
 	pthread_mutex_destroy(&ph->mutex_print);
 	free(threads);
 }
 
 /*
  * Parse user input
-// TODO validate_user_input(t_Philo);
  * Initilise philos struct 
  * Create all threads
  * Free memory allocated
