@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/03 20:26:55 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 10:54:12 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ void	*start_watcher(void *args)
 {
 	t_Philo	*ph;
 	int		philo_id;
-	int		now;
 	int		time_since_eating;
 	int		serving;
 	int		philos_done;
@@ -71,11 +70,10 @@ void	*start_watcher(void *args)
 		usleep(10);
 	while (serving)
 	{
-		now = get_relative_time(ph);
 		philo_id = 0;
 		while (philo_id < ph->nr_of_philos)
 		{
-			time_since_eating = now - ph->last_meal[philo_id];
+			time_since_eating = get_relative_time(ph) - ph->last_meal[philo_id];
 			if (time_since_eating > ph->time_to_die)
 			{
 				log_death(ph, philo_id + 1);
@@ -88,8 +86,6 @@ void	*start_watcher(void *args)
 		}
 		if (philos_done == ph->nr_of_philos)
 			serving = 0;
-		//else
-		//	usleep(10);
 	}
 	return (NULL);
 }
@@ -107,7 +103,7 @@ void	*start_philo(void *args)
 
 	ph = (t_Philo *)args;
 	repeat = ph->times_must_eat;
-	philo_id = ph->philos_count++; 
+	philo_id = ph->philos_count++;
 	while (ph->stime == 0)
 		usleep(100);
 	while (repeat > 0)
@@ -132,6 +128,7 @@ void	*start_philo(void *args)
  * Initialise print mutex
  * Sets time zero 
  * Wait for threads to finish and call pthread_join()
+   TODO free threads
  */
 void	create_threads(t_Philo *ph)
 {
@@ -152,8 +149,8 @@ void	create_threads(t_Philo *ph)
 		else
 			if (VERBOSE > 1)
 				printf("Thread %d created - id %d\n", i + 1, (int) threads[i]);
-		pthread_mutex_init(&ph->mutex_print, NULL); 
-		if (i ==  ph->nr_of_philos)
+		pthread_mutex_init(&ph->mutex_print, NULL);
+		if (i == ph->nr_of_philos)
 			set_time_zero(ph);
 		i++;
 	}
@@ -163,10 +160,10 @@ void	create_threads(t_Philo *ph)
 		if (errno != 0 && VERBOSE > 0)
 			printf("pthread_join() [%d] failed\n", i);
 	}
-	//TODO free threads
 }
 
 // TODO validate_user_input(t_Philo);
+//TODO: free philos->forks and mutexes
 int	main(int argc, char **argv)
 {
 	int		error;
@@ -181,8 +178,6 @@ int	main(int argc, char **argv)
 	philos.meals_eaten = malloc(philos.nr_of_philos * sizeof(int));
 	init_mutex_forks(&philos);
 	create_threads(&philos);
-	//TODO: free philos->forks and mutexes
 	printf("All done eating %d time(s)\n", philos.times_must_eat);
-	//getchar();
 	return (0);
 }

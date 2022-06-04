@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:49 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/03 14:40:08 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 10:55:13 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <sys/time.h> // used for gettimeofday
 
 # define INT_MAX 2147483647
-# define VERBOSE 0
+# define VERBOSE 1
 
 typedef struct Philo
 {

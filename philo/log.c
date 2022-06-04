@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/17 07:14:39 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/03 14:31:20 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 10:56:46 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	log_eat(t_Philo *ph, int philo_id)
 
 	pthread_mutex_lock(&ph->mutex_print);
 	timestamp = get_relative_time(ph);
-	ph->last_meal[philo_id - 1] = timestamp;
+	ph->last_meal[philo_id - 1] = timestamp + ph->time_to_eat;
 	printf("%dms %d is eating\n", timestamp, philo_id);
 	pthread_mutex_unlock(&ph->mutex_print);
 	usleep(ph->time_to_eat);
