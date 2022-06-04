@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronnde>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 12:22:20 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 12:01:27 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 12:51:34 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ void	set_time_zero(t_Philo *ph)
 		printf("sec: %ld usec: %d\n", current_time.tv_sec, current_time.tv_usec);
 }
 
-int	get_relative_time(t_Philo *ph)
+long	get_rel_time(t_Philo *ph)
 {
 	struct timeval	current_time;
-	int				sec_from_zero;
-	int				usec_from_zero;
+	long			sec_from_zero;
+	long			usec_from_zero;
 
 	gettimeofday(&current_time, NULL);
 	sec_from_zero = current_time.tv_sec - ph->stime;

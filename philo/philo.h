@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:49 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 12:05:46 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 12:54:28 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ typedef struct Philo
 	int				stime;
 	int				utime;
 	int				*meals_eaten;
-	int				*last_meal;
+	long			*last_meal;
 	pthread_mutex_t	mutex_print;
 }	t_Philo;
 
 int		ft_atoi(const char *str);
 void	set_time_zero(t_Philo *ph);
-int		get_relative_time(t_Philo *ph);
+long	get_rel_time(t_Philo *ph);
 void	init_mutex_forks(t_Philo *ph);
 void	free_mutex_forks(t_Philo *philos);
 void	log_input_params(int argc, t_Philo *philos);

@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 12:04:34 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 12:54:58 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	*start_watcher(void *args)
 {
 	t_Philo	*ph;
 	int		philo_id;
-	int		time_since_eating;
+	int		ms_since_eat;
 	int		philos_done_eating;
 
 	ph = (t_Philo *)args;
@@ -63,8 +63,8 @@ void	*start_watcher(void *args)
 		philo_id = 0;
 		while (philo_id < ph->nr_of_philos)
 		{
-			time_since_eating = get_relative_time(ph) - ph->last_meal[philo_id];
-			if (time_since_eating > ph->time_to_die)
+			ms_since_eat = (int)(get_rel_time(ph) - ph->last_meal[philo_id]);
+			if (ms_since_eat > ph->time_to_die)
 				log_death_and_exit(ph, philo_id + 1);
 			else if (ph->meals_eaten[philo_id] == ph->times_must_eat)
 				philos_done_eating++;
@@ -95,7 +95,7 @@ void	*start_philo(void *args)
 		pick_forks(ph, philo_id - 1);
 		log_eat(ph, philo_id);
 		if (VERBOSE)
-			printf("%d ate at: %d\n", philo_id, ph->last_meal[philo_id - 1]);
+			printf("%d ate at: %ld\n", philo_id, ph->last_meal[philo_id - 1]);
 		put_forks(ph, philo_id - 1);
 		log_sleep(ph, philo_id);
 		log_think(ph, philo_id);
@@ -163,7 +163,7 @@ int	main(int argc, char **argv)
 		return (1);
 	philos.philos_count = 1;
 	philos.stime = 0;
-	philos.last_meal = malloc(philos.nr_of_philos * sizeof(int));
+	philos.last_meal = malloc(philos.nr_of_philos * sizeof(long));
 	philos.meals_eaten = malloc(philos.nr_of_philos * sizeof(int));
 	init_mutex_forks(&philos);
 	create_threads(&philos);

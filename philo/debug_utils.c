@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronnde>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 12:22:20 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 11:50:48 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 12:51:50 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,6 @@ void	log_put_fork(t_Philo *ph, int philo_id)
 {
 	int	timestamp;
 
-	timestamp = get_relative_time(ph);
+	timestamp = get_rel_time(ph);
 	printf("%dms %d has released its forks\n", timestamp, philo_id);
 }
