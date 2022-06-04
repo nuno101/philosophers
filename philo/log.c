@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/17 07:14:39 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 14:57:16 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 19:02:07 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,27 +25,36 @@ void	log_take_fork(t_Philo *ph, int philo_id, int fork_index)
 	pthread_mutex_unlock(&ph->mutex_print);
 }
 
+/*
+ * time of last meal is defined as time at the start of last meal
+ */
 void	log_eat(t_Philo *ph, int philo_id)
 {
 	long	timestamp;
 
 	pthread_mutex_lock(&ph->mutex_print);
 	timestamp = get_rel_time(ph);
-	ph->last_meal[philo_id - 1] = timestamp + ph->time_to_eat;
+	ph->last_meal[philo_id - 1] = timestamp;
 	printf("%ldms %d is eating\n", timestamp, philo_id);
 	pthread_mutex_unlock(&ph->mutex_print);
-	usleep(ph->time_to_eat);
+	usleep(ph->time_to_eat * 1000);
+	//my_usleep(ph->time_to_eat * 1000);
 }
 
 void	log_sleep(t_Philo *ph, int philo_id)
 {
 	long	timestamp;
+	//long	last_meal_end;
 
 	pthread_mutex_lock(&ph->mutex_print);
 	timestamp = get_rel_time(ph);
 	printf("%ldms %d is sleeping\n", timestamp, philo_id);
 	pthread_mutex_unlock(&ph->mutex_print);
-	usleep(ph->time_to_sleep);
+	usleep(ph->time_to_sleep * 1000);
+	//my_usleep(ph->time_to_sleep * 1000);
+	//last_meal_end = ph->last_meal[philo_id - 1] + ph->time_to_eat;
+	//printf("%ldms %d is sleeping\n", last_meal_end, philo_id);
+	//my_usleep((ph->time_to_sleep - (timestamp - last_meal_end)) * 1000);
 }
 
 void	log_think(t_Philo *ph, int philo_id)

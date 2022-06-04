@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronnde>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 12:22:20 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 12:51:34 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/04 18:44:13 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,18 @@ long	get_rel_time(t_Philo *ph)
 	gettimeofday(&current_time, NULL);
 	sec_from_zero = current_time.tv_sec - ph->stime;
 	usec_from_zero = current_time.tv_usec - ph->utime;
-	return (sec_from_zero * 1000000 + usec_from_zero);
+	return (sec_from_zero * 1000 + usec_from_zero/1000);
+}
+
+void	my_usleep(int duration)
+{
+	//printf("my_usleep: %d\n", duration/1000);
+	while (duration > 500)
+	{
+		usleep(500);
+		duration -= 500;
+	}
+	usleep(duration);
 }
 
 /*
