@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 20:27:41 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/05 10:03:38 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	parse_user_input(int argc, char **argv, t_Philo *ph)
  * Waits for all threads to be ready (stime > 0) to start
  * Checks whether each philosopher has starved to death
  * Thread ends when:
- * 1) if case a philo starves by calling log_death_and_exit
+ * 1) if case a philo starves by calling philo_die_and_exit
  * 2) when all philosophers have eaten [ph->times_must_eat] times
  */
 void	*start_watcher(void *args)
@@ -66,7 +66,7 @@ void	*start_watcher(void *args)
 		{
 			ms_since_eat = (int)(get_rel_time(ph) - ph->last_meal[philo_id]);
 			if (ms_since_eat > ph->time_to_die)
-				log_death_and_exit(ph, philo_id + 1);
+				philo_die_and_exit(ph, philo_id + 1);
 			else if (ph->meals_eaten[philo_id] == ph->times_must_eat)
 				philos_done_eating++;
 			philo_id++;
@@ -95,11 +95,9 @@ void	*start_philo(void *args)
 		usleep(ph->time_to_eat * 1000);
 	while (repeat > 0)
 	{
-		pick_forks(ph, philo_id - 1);
-		log_eat(ph, philo_id);
-		put_forks(ph, philo_id - 1);
-		log_sleep(ph, philo_id);
-		log_think(ph, philo_id);
+		philo_eat(ph, philo_id);
+		philo_sleep(ph, philo_id);
+		philo_think(ph, philo_id);
 		if (repeat != INT_MAX)
 			repeat--;
 	}

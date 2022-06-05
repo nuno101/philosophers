@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   log.c                                              :+:      :+:    :+:   */
+/*   philo_life.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/17 07:14:39 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 20:51:41 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/05 10:02:24 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	log_take_fork(t_Philo *ph, int philo_id, int fork_index)
+void	philo_take_fork(t_Philo *ph, int philo_id, int fork_index)
 {
 	long	timestamp;
 
@@ -28,10 +28,11 @@ void	log_take_fork(t_Philo *ph, int philo_id, int fork_index)
 /*
  * time of last meal is defined as time at the start of last meal
  */
-void	log_eat(t_Philo *ph, int philo_id)
+void	philo_eat(t_Philo *ph, int philo_id)
 {
 	long	timestamp;
 
+	philo_pick_forks(ph, philo_id - 1);
 	pthread_mutex_lock(&ph->mutex_print);
 	timestamp = get_rel_time(ph);
 	ph->last_meal[philo_id - 1] = timestamp;
@@ -39,10 +40,10 @@ void	log_eat(t_Philo *ph, int philo_id)
 	pthread_mutex_unlock(&ph->mutex_print);
 	//usleep(ph->time_to_eat * 1000);
 	usleep((ph->time_to_eat - (timestamp - get_rel_time(ph))) * 1000);
-	//sleep_until(timestamp + ph->time_to_eat - get_rel_time(ph));
+	philo_put_forks(ph, philo_id - 1);
 }
 
-void	log_sleep(t_Philo *ph, int philo_id)
+void	philo_sleep(t_Philo *ph, int philo_id)
 {
 	long	timestamp;
 	//long	last_meal_end;
@@ -59,7 +60,7 @@ void	log_sleep(t_Philo *ph, int philo_id)
 	//my_usleep((ph->time_to_sleep - (timestamp - last_meal_end)) * 1000);
 }
 
-void	log_think(t_Philo *ph, int philo_id)
+void	philo_think(t_Philo *ph, int philo_id)
 {
 	long	timestamp;
 
@@ -73,7 +74,7 @@ void	log_think(t_Philo *ph, int philo_id)
  * death of a philosopher ends the simulation
  * upon exit the OS takes care of releasing the mutex lock
  */
-void	log_death_and_exit(t_Philo *ph, int philo_id)
+void	philo_die_and_exit(t_Philo *ph, int philo_id)
 {
 	long	timestamp;
 

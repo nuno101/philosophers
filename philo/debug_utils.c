@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronnde>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 12:22:20 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 14:57:44 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/05 09:54:53 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	log_input_params(int argc, t_Philo *philos)
 /*
  * called only in VERBOSE mode for debugging purposes
  */
-void	log_put_fork(t_Philo *ph, int philo_id)
+void	philo_put_fork(t_Philo *ph, int philo_id)
 {
 	int	timestamp;
 

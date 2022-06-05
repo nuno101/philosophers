@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronnde>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 17:53:59 by nlouro            #+#    #+#             */
-/*   Updated: 2022/05/27 15:31:35 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/05 09:59:23 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	lock_fork(t_Philo *ph, int fork_index)
 /*
  * pick the two closest forks as defined
  */
-void	pick_forks(t_Philo *ph, int philo_id)
+void	philo_pick_forks(t_Philo *ph, int philo_id)
 {
 	int	fork1_index;
 	int	fork2_index;
@@ -47,14 +47,14 @@ void	pick_forks(t_Philo *ph, int philo_id)
 	fork2_index = find_fork2_index(fork1_index, ph->nr_of_philos);
 	lock_fork(ph, fork1_index);
 	lock_fork(ph, fork2_index);
-	log_take_fork(ph, philo_id + 1, fork1_index);
-	log_take_fork(ph, philo_id + 1, fork2_index);
+	philo_take_fork(ph, philo_id + 1, fork1_index);
+	philo_take_fork(ph, philo_id + 1, fork2_index);
 }
 
 /*
  * release both forks by unlocking their mutexes
  */
-void	put_forks(t_Philo *ph, int philo_id)
+void	philo_put_forks(t_Philo *ph, int philo_id)
 {
 	int	fork1_index;
 	int	fork2_index;
@@ -66,5 +66,5 @@ void	put_forks(t_Philo *ph, int philo_id)
 	if (pthread_mutex_unlock(&ph->forks[fork2_index]))
 		printf("pthread_mutex_unlock_2 failed\n");
 	if (VERBOSE)
-		log_put_fork(ph, philo_id + 1);
+		philo_put_fork(ph, philo_id + 1);
 }
