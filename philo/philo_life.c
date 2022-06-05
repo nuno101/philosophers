@@ -6,12 +6,12 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/17 07:14:39 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/05 10:02:24 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/05 10:12:39 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
+/*
 void	philo_take_fork(t_Philo *ph, int philo_id, int fork_index)
 {
 	long	timestamp;
@@ -24,15 +24,15 @@ void	philo_take_fork(t_Philo *ph, int philo_id, int fork_index)
 		printf("%ldms %d has taken a fork\n", timestamp, philo_id);
 	pthread_mutex_unlock(&ph->mutex_print);
 }
-
+*/
 /*
  * time of last meal is defined as time at the start of last meal
  */
+/*
 void	philo_eat(t_Philo *ph, int philo_id)
 {
 	long	timestamp;
 
-	philo_pick_forks(ph, philo_id - 1);
 	pthread_mutex_lock(&ph->mutex_print);
 	timestamp = get_rel_time(ph);
 	ph->last_meal[philo_id - 1] = timestamp;
@@ -42,6 +42,7 @@ void	philo_eat(t_Philo *ph, int philo_id)
 	usleep((ph->time_to_eat - (timestamp - get_rel_time(ph))) * 1000);
 	philo_put_forks(ph, philo_id - 1);
 }
+*/
 
 void	philo_sleep(t_Philo *ph, int philo_id)
 {

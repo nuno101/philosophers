@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/05 10:03:38 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/05 10:06:54 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void	*start_philo(void *args)
 		philo_eat(ph, philo_id);
 		philo_sleep(ph, philo_id);
 		philo_think(ph, philo_id);
-		if (repeat != INT_MAX)
+		if (repeat)
 			repeat--;
 	}
 	ph->meals_eaten[philo_id] = ph->times_must_eat;

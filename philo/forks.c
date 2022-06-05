@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronnde>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 17:53:59 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/05 09:59:23 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/05 10:13:32 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,19 @@ void	lock_fork(t_Philo *ph, int fork_index)
 {
 	if (0 != pthread_mutex_lock(&ph->forks[fork_index]))
 		printf("pthread_mutex_lock failed\n");
+}
+
+void	philo_take_fork(t_Philo *ph, int philo_id, int fork_index)
+{
+	long	timestamp;
+
+	pthread_mutex_lock(&ph->mutex_print);
+	timestamp = get_rel_time(ph);
+	if (VERBOSE)
+		printf("%ldms %d took fork f%d\n", timestamp, philo_id, fork_index + 1);
+	else
+		printf("%ldms %d has taken a fork\n", timestamp, philo_id);
+	pthread_mutex_unlock(&ph->mutex_print);
 }
 
 /*
@@ -67,4 +80,22 @@ void	philo_put_forks(t_Philo *ph, int philo_id)
 		printf("pthread_mutex_unlock_2 failed\n");
 	if (VERBOSE)
 		philo_put_fork(ph, philo_id + 1);
+}
+
+/*
+ * time of last meal is defined as time at the start of last meal
+ */
+void	philo_eat(t_Philo *ph, int philo_id)
+{
+	long	timestamp;
+
+	philo_pick_forks(ph, philo_id - 1);
+	pthread_mutex_lock(&ph->mutex_print);
+	timestamp = get_rel_time(ph);
+	ph->last_meal[philo_id - 1] = timestamp;
+	printf("%ldms %d is eating\n", timestamp, philo_id);
+	pthread_mutex_unlock(&ph->mutex_print);
+	//usleep(ph->time_to_eat * 1000);
+	usleep((ph->time_to_eat - (timestamp - get_rel_time(ph))) * 1000);
+	philo_put_forks(ph, philo_id - 1);
 }

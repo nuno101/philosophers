@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:49 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/05 09:58:54 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/05 10:11:28 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ void	my_msleep(int milisecs);
 void	init_mutex_forks(t_Philo *ph);
 void	free_mutex_forks(t_Philo *philos);
 void	log_input_params(int argc, t_Philo *philos);
-void	philo_pick_forks(t_Philo *philos, int philo_id);
-void	philo_put_forks(t_Philo *philos, int philo_id);
-void	philo_take_fork(t_Philo *ph, int philo_id, int fork_index);
+//void	philo_pick_forks(t_Philo *philos, int philo_id);
+//void	philo_put_forks(t_Philo *philos, int philo_id);
+//void	philo_take_fork(t_Philo *ph, int philo_id, int fork_index);
 void	philo_put_fork(t_Philo *ph, int philo_id);
 void	philo_eat(t_Philo *ph, int philo_id);
 void	philo_sleep(t_Philo *ph, int philo_id);
