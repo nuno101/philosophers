@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronnde>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 17:53:59 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/09 14:57:56 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/09 15:20:09 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,17 @@ void	philo_put_forks(t_Philo *ph, int philo_id)
 {
 	int	fork1_index;
 	int	fork2_index;
+	int	error;
 
 	fork1_index = philo_id;
 	fork2_index = find_fork2_index(fork1_index, ph->nr_of_philos);
-	if (pthread_mutex_unlock(&ph->forks[fork1_index]))
-		printf("pthread_mutex_unlock_1 failed\n");
-	if (pthread_mutex_unlock(&ph->forks[fork2_index]))
-		printf("pthread_mutex_unlock_2 failed\n");
+	error = pthread_mutex_unlock(&ph->forks[fork1_index]);
+	error += pthread_mutex_unlock(&ph->forks[fork2_index]);
+	if (error)
+	{
+		printf("pthread_mutex_unlock failed\n");
+		exit(1);
+	}
 	if (VERBOSE)
 		philo_put_fork(ph, philo_id + 1);
 }
