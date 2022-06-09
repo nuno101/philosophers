@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronnde>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 17:53:59 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/05 10:13:32 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/09 14:57:56 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,22 @@ void	lock_fork(t_Philo *ph, int fork_index)
 		printf("pthread_mutex_lock failed\n");
 }
 
-void	philo_take_fork(t_Philo *ph, int philo_id, int fork_index)
+void	philo_take_forks(t_Philo *ph, int philo_id, int fork1_index, int fork2_index)
 {
 	long	timestamp;
 
 	pthread_mutex_lock(&ph->mutex_print);
 	timestamp = get_rel_time(ph);
 	if (VERBOSE)
-		printf("%ldms %d took fork f%d\n", timestamp, philo_id, fork_index + 1);
+	{
+		printf("%ldms %d took fork f%d\n", timestamp, philo_id, fork1_index + 1);
+		printf("%ldms %d took fork f%d\n", timestamp, philo_id, fork2_index + 1);
+	}
 	else
+	{
 		printf("%ldms %d has taken a fork\n", timestamp, philo_id);
+		printf("%ldms %d has taken a fork\n", timestamp, philo_id);
+	}
 	pthread_mutex_unlock(&ph->mutex_print);
 }
 
@@ -60,8 +66,7 @@ void	philo_pick_forks(t_Philo *ph, int philo_id)
 	fork2_index = find_fork2_index(fork1_index, ph->nr_of_philos);
 	lock_fork(ph, fork1_index);
 	lock_fork(ph, fork2_index);
-	philo_take_fork(ph, philo_id + 1, fork1_index);
-	philo_take_fork(ph, philo_id + 1, fork2_index);
+	philo_take_forks(ph, philo_id + 1, fork1_index, fork2_index);
 }
 
 /*
@@ -95,7 +100,6 @@ void	philo_eat(t_Philo *ph, int philo_id)
 	ph->last_meal[philo_id - 1] = timestamp;
 	printf("%ldms %d is eating\n", timestamp, philo_id);
 	pthread_mutex_unlock(&ph->mutex_print);
-	//usleep(ph->time_to_eat * 1000);
 	usleep((ph->time_to_eat - (timestamp - get_rel_time(ph))) * 1000);
 	philo_put_forks(ph, philo_id - 1);
 }
