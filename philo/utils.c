@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronnde>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 12:22:20 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/04 20:52:34 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/09 16:06:59 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,22 @@ long	get_rel_time(t_Philo *ph)
 	sec_from_zero = current_time.tv_sec - ph->stime;
 	usec_from_zero = current_time.tv_usec - ph->utime;
 	return (sec_from_zero * 1000 + usec_from_zero / 1000);
+}
+
+/*
+ * target wake-up time: wake_at 
+ * idea is to call usleep with smaller time periods
+ */
+void	sleep_until(t_Philo *ph, long wake_at)
+{
+	long	now;
+
+	now = get_rel_time(ph);
+	while(now < wake_at)
+	{
+		usleep(100);
+		now = get_rel_time(ph);
+	}
 }
 
 /*

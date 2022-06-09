@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronnde>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 17:53:59 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/09 15:20:09 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/09 16:05:27 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,6 @@ void	philo_eat(t_Philo *ph, int philo_id)
 	ph->last_meal[philo_id - 1] = timestamp;
 	printf("%ldms %d is eating\n", timestamp, philo_id);
 	pthread_mutex_unlock(&ph->mutex_print);
-	usleep((ph->time_to_eat - (timestamp - get_rel_time(ph))) * 1000);
+	sleep_until(ph, timestamp + ph->time_to_eat);
 	philo_put_forks(ph, philo_id - 1);
 }

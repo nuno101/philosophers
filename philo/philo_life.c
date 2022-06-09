@@ -6,59 +6,21 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/17 07:14:39 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/05 10:12:39 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/09 16:10:29 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-/*
-void	philo_take_fork(t_Philo *ph, int philo_id, int fork_index)
-{
-	long	timestamp;
-
-	pthread_mutex_lock(&ph->mutex_print);
-	timestamp = get_rel_time(ph);
-	if (VERBOSE)
-		printf("%ldms %d took fork f%d\n", timestamp, philo_id, fork_index + 1);
-	else
-		printf("%ldms %d has taken a fork\n", timestamp, philo_id);
-	pthread_mutex_unlock(&ph->mutex_print);
-}
-*/
-/*
- * time of last meal is defined as time at the start of last meal
- */
-/*
-void	philo_eat(t_Philo *ph, int philo_id)
-{
-	long	timestamp;
-
-	pthread_mutex_lock(&ph->mutex_print);
-	timestamp = get_rel_time(ph);
-	ph->last_meal[philo_id - 1] = timestamp;
-	printf("%ldms %d is eating\n", timestamp, philo_id);
-	pthread_mutex_unlock(&ph->mutex_print);
-	//usleep(ph->time_to_eat * 1000);
-	usleep((ph->time_to_eat - (timestamp - get_rel_time(ph))) * 1000);
-	philo_put_forks(ph, philo_id - 1);
-}
-*/
 
 void	philo_sleep(t_Philo *ph, int philo_id)
 {
 	long	timestamp;
-	//long	last_meal_end;
 
 	pthread_mutex_lock(&ph->mutex_print);
 	timestamp = get_rel_time(ph);
 	printf("%ldms %d is sleeping\n", timestamp, philo_id);
 	pthread_mutex_unlock(&ph->mutex_print);
-	//usleep(ph->time_to_sleep * 1000);
-	usleep((ph->time_to_eat - (timestamp - get_rel_time(ph))) * 1000);
-	//my_msleep(ph->time_to_sleep);
-	//last_meal_end = ph->last_meal[philo_id - 1] + ph->time_to_eat;
-	//printf("%ldms %d is sleeping\n", last_meal_end, philo_id);
-	//my_usleep((ph->time_to_sleep - (timestamp - last_meal_end)) * 1000);
+	sleep_until(ph, timestamp + ph->time_to_sleep);
 }
 
 void	philo_think(t_Philo *ph, int philo_id)
