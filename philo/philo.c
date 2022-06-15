@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/05 10:06:54 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/15 13:24:18 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,14 +85,21 @@ void	*start_philo(void *args)
 	t_Philo	*ph;
 	int		philo_id;
 	int		repeat;
+	long	timestamp;
 
 	ph = (t_Philo *)args;
 	repeat = ph->times_must_eat;
 	philo_id = ph->philos_count++;
+	ph->meals_eaten[philo_id] = 0;
 	while (ph->stime == 0)
 		usleep(100);
-	if (philo_id % 2 != 0)
-		usleep(ph->time_to_eat * 1000);
+	if (philo_id % 2 == 0)
+	{
+		timestamp = get_rel_time(ph);
+		sleep_until(ph, timestamp + ph->time_to_eat);
+	}
+	if (ph->nr_of_philos % 2 != 0 && philo_id == ph->nr_of_philos)
+		usleep(900);
 	while (repeat > 0)
 	{
 		philo_eat(ph, philo_id);
@@ -129,9 +136,9 @@ void	create_threads(t_Philo *ph)
 			printf("Thread creation failed\n");
 		else if (errno == 0 && VERBOSE > 1)
 			printf("Thread %d created - id %d\n", i + 1, (int) threads[i]);
-		pthread_mutex_init(&ph->mutex_print, NULL);
 		i++;
 	}
+	pthread_mutex_init(&ph->mutex_print, NULL);
 	set_time_zero(ph);
 	while (i-- > 0)
 		if (pthread_join(threads[i], NULL) != 0 && VERBOSE > 0)
