@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronnde>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 12:22:20 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/16 19:02:01 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/16 19:14:39 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,7 @@ void	sleep_until(t_Philo *ph, int wake_at)
 	{
 		if (now - wake_at > 10)
 			usleep(3000);
-		else
-		if (now - wake_at > 2)
+		else if (now - wake_at > 2)
 			usleep(500);
 		else
 			usleep(100);

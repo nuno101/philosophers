@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronnde>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 17:53:59 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/16 19:00:05 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/16 19:17:19 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,19 +90,19 @@ void	philo_put_forks(t_Philo *ph, int philo_id)
  */
 void	philo_eat(t_Philo *ph, int philo_id)
 {
-	int	timestamp;
+	int	t;
 
 	philo_pick_forks(ph, philo_id - 1);
 	if (VERBOSE)
 		ph->meals_eaten[philo_id] += 1;
 	pthread_mutex_lock(&ph->mutex_print);
-	timestamp = get_rel_time(ph);
-	ph->last_meal[philo_id - 1] = timestamp;
+	t = get_rel_time(ph);
+	ph->last_meal[philo_id - 1] = t;
 	if (VERBOSE)
-		printf("%dms %d is eating (meal #%d)\n", timestamp, philo_id, ph->meals_eaten[philo_id]);
+		printf("%dms %d eating #%d\n", t, philo_id, ph->meals_eaten[philo_id]);
 	else
-		printf("%dms %d is eating\n", timestamp, philo_id);
+		printf("%dms %d is eating\n", t, philo_id);
 	pthread_mutex_unlock(&ph->mutex_print);
-	sleep_until(ph, timestamp + ph->time_to_eat);
+	sleep_until(ph, t + ph->time_to_eat);
 	philo_put_forks(ph, philo_id - 1);
 }
