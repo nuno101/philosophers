@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/15 17:33:57 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/16 11:42:27 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,12 @@ void	*start_watcher(void *args)
 	int		philo_id;
 	int		ms_since_eat;
 	int		philos_done_eating;
-	int		timestamp;
 
 	ph = (t_Philo *)args;
 	philos_done_eating = 0;
 	while (ph->stime == 0)
 		usleep(100);
-	timestamp = get_rel_time(ph);
-	sleep_until(ph, timestamp + ph->time_to_die);
+	sleep_until(ph, get_rel_time(ph) + ph->time_to_die);
 	while (philos_done_eating < ph->nr_of_philos)
 	{
 		philo_id = 0;
@@ -88,7 +86,6 @@ void	*start_philo(void *args)
 	t_Philo	*ph;
 	int		philo_id;
 	int		repeat;
-	int		timestamp;
 
 	ph = (t_Philo *)args;
 	repeat = ph->times_must_eat;
@@ -97,11 +94,8 @@ void	*start_philo(void *args)
 	while (ph->stime == 0)
 		usleep(100);
 	if (philo_id % 2 == 0)
-	{
-		timestamp = get_rel_time(ph);
-		sleep_until(ph, timestamp + ph->time_to_eat);
+		sleep_until(ph, get_rel_time(ph) + ph->time_to_eat);
 		//usleep(800);
-	}
 	else if (ph->nr_of_philos % 2 != 0 && philo_id == 1)
 		usleep(500);
 	while (repeat > 0)

@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/17 07:14:39 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/16 08:52:06 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/16 11:43:21 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	philo_think(t_Philo *ph, int philo_id)
 	// sleep while the other philos are eating/ using the forks
 	//sleep_until(ph, timestamp + ph->time_to_eat);
 	//usleep((ph->time_to_die - ph->time_to_eat - ph->time_to_sleep)/3);
-	sleep_until(ph, timestamp + (ph->time_to_die - ph->time_to_eat - ph->time_to_sleep)/3);
+	sleep_until(ph, timestamp + (ph->time_to_die - ph->time_to_eat - ph->time_to_sleep) / 3);
 }
 
 /*
