@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/16 11:42:27 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/16 19:04:31 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	parse_user_input(int argc, char **argv, t_Philo *ph)
  * Thread ends when:
  * 1) if case a philo starves by calling philo_die_and_exit
  * 2) when all philosophers have eaten [ph->times_must_eat] times
+ * Pause the execution for 3.3ms - enough to detect deaths within 5ms
  */
 void	*start_watcher(void *args)
 {
@@ -72,6 +73,7 @@ void	*start_watcher(void *args)
 				philos_done_eating++;
 			philo_id++;
 		}
+		usleep(3300);
 	}
 	return (NULL);
 }
@@ -92,12 +94,11 @@ void	*start_philo(void *args)
 	philo_id = ph->philos_count++;
 	ph->meals_eaten[philo_id] = 0;
 	while (ph->stime == 0)
-		usleep(100);
+		usleep(200);
 	if (philo_id % 2 == 0)
 		sleep_until(ph, get_rel_time(ph) + ph->time_to_eat);
-		//usleep(800);
 	else if (ph->nr_of_philos % 2 != 0 && philo_id == 1)
-		usleep(500);
+		usleep(300);
 	while (repeat > 0)
 	{
 		philo_eat(ph, philo_id);

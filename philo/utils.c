@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronnde>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 12:22:20 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/16 11:44:33 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/16 19:02:01 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	get_rel_time(t_Philo *ph)
 /*
  * target wake-up time: wake_at 
  * idea is to call usleep with smaller time periods
+ * to keep the wake_up time accurate
  */
 void	sleep_until(t_Philo *ph, int wake_at)
 {
@@ -50,7 +51,13 @@ void	sleep_until(t_Philo *ph, int wake_at)
 	now = get_rel_time(ph);
 	while (now < wake_at)
 	{
-		usleep(100);
+		if (now - wake_at > 10)
+			usleep(3000);
+		else
+		if (now - wake_at > 2)
+			usleep(500);
+		else
+			usleep(100);
 		now = get_rel_time(ph);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronnde>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 17:53:59 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/16 11:40:58 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/16 19:00:05 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,6 @@ int	find_fork2_index(int fork1_index, int nr_of_philos)
 		fork2_index = nr_of_philos - 1;
 	return (fork2_index);
 }
-
-/*
- * lock the fork mutex to avoid being used twice
- * pthread_mutex_lock waits until the fork lock is acquired
- */
-/*
-void	lock_fork(t_Philo *ph, int fork_index)
-{
-	if (0 != pthread_mutex_lock(&ph->forks[fork_index]))
-		printf("pthread_mutex_lock failed\n");
-}
-*/
 
 void	philo_take_forks(t_Philo *ph, int philo_id, int f1_index, int f2_index)
 {
@@ -72,18 +60,6 @@ void	philo_pick_forks(t_Philo *ph, int philo_id)
 		printf("pthread_mutex_lock failed\n");
 	if (0 != pthread_mutex_lock(&ph->forks[fork2_index]))
 		printf("pthread_mutex_lock failed\n");
-	/*
-	if (philo_id % 2 == 0)
-	{
-		lock_fork(ph, fork1_index);
-		lock_fork(ph, fork2_index);
-	}
-	else
-	{
-		lock_fork(ph, fork2_index);
-		lock_fork(ph, fork1_index);
-	}
-	*/
 	philo_take_forks(ph, philo_id + 1, fork1_index, fork2_index);
 }
 
