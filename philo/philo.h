@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:49 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/09 15:57:58 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/16 10:03:24 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <sys/time.h> // used for gettimeofday
 
 # define INT_MAX 2147483647
-# define VERBOSE 0
+# define VERBOSE 1
 
 typedef struct Philo
 {
@@ -35,14 +35,14 @@ typedef struct Philo
 	int				stime;
 	int				utime;
 	int				*meals_eaten;
-	long			*last_meal;
+	int				*last_meal;
 	pthread_mutex_t	mutex_print;
 }	t_Philo;
 
 int		ft_atoi(const char *str);
 void	set_time_zero(t_Philo *ph);
-long	get_rel_time(t_Philo *ph);
-void	sleep_until(t_Philo *ph, long wake_at);
+int		get_rel_time(t_Philo *ph);
+void	sleep_until(t_Philo *ph, int wake_at);
 void	my_msleep(int milisecs);
 void	init_mutex_forks(t_Philo *ph);
 void	free_mutex_forks(t_Philo *philos);

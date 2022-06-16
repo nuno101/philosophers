@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:34:25 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/15 13:24:18 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/15 17:33:57 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,14 @@ void	*start_watcher(void *args)
 	int		philo_id;
 	int		ms_since_eat;
 	int		philos_done_eating;
+	int		timestamp;
 
 	ph = (t_Philo *)args;
 	philos_done_eating = 0;
 	while (ph->stime == 0)
-		usleep(ph->time_to_die);
+		usleep(100);
+	timestamp = get_rel_time(ph);
+	sleep_until(ph, timestamp + ph->time_to_die);
 	while (philos_done_eating < ph->nr_of_philos)
 	{
 		philo_id = 0;
@@ -85,7 +88,7 @@ void	*start_philo(void *args)
 	t_Philo	*ph;
 	int		philo_id;
 	int		repeat;
-	long	timestamp;
+	int		timestamp;
 
 	ph = (t_Philo *)args;
 	repeat = ph->times_must_eat;
@@ -97,16 +100,16 @@ void	*start_philo(void *args)
 	{
 		timestamp = get_rel_time(ph);
 		sleep_until(ph, timestamp + ph->time_to_eat);
+		//usleep(800);
 	}
-	if (ph->nr_of_philos % 2 != 0 && philo_id == ph->nr_of_philos)
-		usleep(900);
+	else if (ph->nr_of_philos % 2 != 0 && philo_id == 1)
+		usleep(500);
 	while (repeat > 0)
 	{
 		philo_eat(ph, philo_id);
 		philo_sleep(ph, philo_id);
 		philo_think(ph, philo_id);
-		if (repeat)
-			repeat--;
+		repeat--;
 	}
 	ph->meals_eaten[philo_id] = ph->times_must_eat;
 	return (NULL);
@@ -163,7 +166,7 @@ int	main(int argc, char **argv)
 		return (1);
 	philos.philos_count = 1;
 	philos.stime = 0;
-	philos.last_meal = malloc(philos.nr_of_philos * sizeof(long));
+	philos.last_meal = malloc(philos.nr_of_philos * sizeof(int));
 	philos.meals_eaten = malloc(philos.nr_of_philos * sizeof(int));
 	init_mutex_forks(&philos);
 	create_threads(&philos);

@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronnde>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 12:22:20 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/09 16:06:59 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/15 16:32:56 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ void	set_time_zero(t_Philo *ph)
 		printf("sec: %ld usec: %d\n", current_time.tv_sec, current_time.tv_usec);
 }
 
-long	get_rel_time(t_Philo *ph)
+int	get_rel_time(t_Philo *ph)
 {
 	struct timeval	current_time;
-	long			sec_from_zero;
-	long			usec_from_zero;
+	int			sec_from_zero;
+	int			usec_from_zero;
 
 	gettimeofday(&current_time, NULL);
 	sec_from_zero = current_time.tv_sec - ph->stime;
@@ -43,9 +43,9 @@ long	get_rel_time(t_Philo *ph)
  * target wake-up time: wake_at 
  * idea is to call usleep with smaller time periods
  */
-void	sleep_until(t_Philo *ph, long wake_at)
+void	sleep_until(t_Philo *ph, int wake_at)
 {
-	long	now;
+	int	now;
 
 	now = get_rel_time(ph);
 	while(now < wake_at)

@@ -6,7 +6,7 @@
 /*   By: nlouro <nlouro@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/17 07:14:39 by nlouro            #+#    #+#             */
-/*   Updated: 2022/06/15 13:24:48 by nlouro           ###   ########.fr       */
+/*   Updated: 2022/06/16 08:52:06 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void	philo_sleep(t_Philo *ph, int philo_id)
 {
-	long	timestamp;
+	int	timestamp;
 
 	pthread_mutex_lock(&ph->mutex_print);
 	timestamp = get_rel_time(ph);
-	printf("%ldms %d is sleeping\n", timestamp, philo_id);
+	printf("%dms %d is sleeping\n", timestamp, philo_id);
 	pthread_mutex_unlock(&ph->mutex_print);
 	sleep_until(ph, timestamp + ph->time_to_sleep);
 }
@@ -29,15 +29,16 @@ void	philo_sleep(t_Philo *ph, int philo_id)
  */
 void	philo_think(t_Philo *ph, int philo_id)
 {
-	long	timestamp;
+	int	timestamp;
 
 	pthread_mutex_lock(&ph->mutex_print);
 	timestamp = get_rel_time(ph);
-	printf("%ldms %d is thinking\n", timestamp, philo_id);
+	printf("%dms %d is thinking\n", timestamp, philo_id);
 	pthread_mutex_unlock(&ph->mutex_print);
 	// sleep while the other philos are eating/ using the forks
 	//sleep_until(ph, timestamp + ph->time_to_eat);
-	usleep(500);
+	//usleep((ph->time_to_die - ph->time_to_eat - ph->time_to_sleep)/3);
+	sleep_until(ph, timestamp + (ph->time_to_die - ph->time_to_eat - ph->time_to_sleep)/3);
 }
 
 /*
@@ -46,10 +47,10 @@ void	philo_think(t_Philo *ph, int philo_id)
  */
 void	philo_die_and_exit(t_Philo *ph, int philo_id)
 {
-	long	timestamp;
+	int	timestamp;
 
 	pthread_mutex_lock(&ph->mutex_print);
 	timestamp = get_rel_time(ph);
-	printf("%ldms %d died\n", timestamp, philo_id);
+	printf("%dms %d died\n", timestamp, philo_id);
 	exit(1);
 }
